@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 13
+names: ['12', 'blue_baff', 'hp_enemy', 'hp_self', 'minion_ally', 'minion_enemy', 'money', 'money_crab', 'red_baff', 'tron-self', 'turret_ally', 'turret_enemy', 'vazon']
+
+roboflow:
+  workspace: s-workspace-gwhsm
+  project: mlbb_claude_bot
+  version: 3
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/s-workspace-gwhsm/mlbb_claude_bot/dataset/3

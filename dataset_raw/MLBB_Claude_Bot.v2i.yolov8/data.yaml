@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 14
+names: ['hero', 'hero_enemy', 'hero_self', 'hp_enemy', 'hp_self', 'jungle-monstr', 'jungle_monstr', 'minion_ally', 'minion_enemy', 'money_crab', 'red_baff', 'turret_ally', 'turret_enemy', 'vazon']
+
+roboflow:
+  workspace: s-workspace-gwhsm
+  project: mlbb_claude_bot
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/s-workspace-gwhsm/mlbb_claude_bot/dataset/2

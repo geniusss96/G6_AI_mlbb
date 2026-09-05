@@ -1,0 +1,20 @@
+path: c:/Users/user/Desktop/скрипт(mlbb)/dataset_raw/MLBB_Combined_v4
+train: train/images
+val: valid/images
+test: test/images
+nc: 14
+names:
+- hp_self
+- hp_enemy
+- minion_enemy
+- minion_ally
+- turret_enemy
+- turret_ally
+- bush
+- money_crab
+- red_baff
+- blue_baff
+- vazon
+- money
+- tron_self
+- tron_enemy

@@ -1,0 +1,37 @@
+[*] FPS: 24.3 | � 155 | K/D: 1/0 | Q-ROAM: LANE_ADVANCE [Q=46.4]                                                                                   [
+� НАГРАДА] +50 CARROTS: ENEMY HERO SLAIN (ZILONG DEAD)! (Всего морковок: 205 | LVL 3)                                                             [�
+ ОБУЧЕНИЕ БОЯ] Тактика 'KITE_AND_POKE' в 'DANGER_CLOSE_HIGH_COMBO_False' обновлена до Q=74.5 (KILLED ENEMY HERO)                                 [�
+ОБУЧЕНИЕ МАРШРУТА] Действие 'LANE_ADVANCE' в состоянии 'SCOUT_HOT_ZONE' получило Q=44.8 (ROUTE LED TO KILL)
+                                                                                                                                                ====
+====================================================                                                                                             [�
+ЗОЛОТОЙ МОМЕНТ СОХРАНЕН В ПАМЯТИ КЛОДА!]                                                                                                        Собы
+тие: HERO_KILL | Награда: +80 � | HP: 100%                                                                                                     Такти
+ческая связка: KITE_AND_POKE -> KITE_AND_POKE -> KITE_AND_POKE -> KITE_AND_POKE -> KITE_AND_POKE -> LANE_ADVANCE                               Описа
+ние: Соло-ликвидация вражеского героя (Зилонг повержен!)                                                                                       Всего
+ лучших моментов в голове: 12                                                                                                                 ======
+==================================================
+                                                                                                                                              [*] FP
+S: 20.4 | � 205 | K/D: 2/0 | Q-ROAM: LANE_ADVANCE [Q=21.6]                                                                                   [� НАГР
+АДА] +10 CARROTS: MINION / CREEP FARMED (Всего морковок: 215 | LVL 3)                                                                       [� ОБУЧЕ
+НИЕ КРИПОВ] Тактика 'FARM_APPROACH' в 'CREEP_FAR_S1_False_SAFE' обновлена до Q=25.2 (CREEP SLAIN (LAST HIT))                               [� ОБУЧЕН
+ИЕ МАРШРУТА] Действие 'LANE_ADVANCE' в состоянии 'SCOUT_MID_SEARCH' получило Q=19.9 (FOUND JUNGLE/LANE FARM)                              [*] FPS: 2
+4.1 | � 215 | K/D: 2/0 | Q-ROAM: LANE_ADVANCE [Q=19.9]                                                                                   [MANUAL] Пр
+инудительный запуск комбо!
+                                                                                                                                         [>>>] Firin
+g Claude Combo: CLAUDE TRUE COMBO (S2 -> S2 -> S1 -> ULT -> S2 BACK) (5 steps)...
+                                                                                                                                         [MANUAL] Пр
+инудительный запуск комбо!                                                                                                               [!] Dropped
+ trigger for 'CLAUDE TRUE COMBO (S2 -> S2 -> S1 -> ULT -> S2 BACK)' (another combo is still active).
+                                                                                                                                         [MANUAL] Пр
+инудительный запуск комбо!                                                                                                               [!] Dropped
+ trigger for 'CLAUDE TRUE COMBO (S2 -> S2 -> S1 -> ULT -> S2 BACK)' (another combo is still active).                                     [*] FPS: 22
+.6 | � 215 | K/D: 2/0 | Q-ROAM: LANE_ADVANCE [Q=19.9]                                                                                   [MANUAL] При
+нудительный запуск комбо!                                                                                                               [!] Dropped
+trigger for 'CLAUDE TRUE COMBO (S2 -> S2 -> S1 -> ULT -> S2 BACK)' (another combo is still active).                                     [*] FPS: 23.
+7 | � 215 | K/D: 2/0 | Q-ROAM: LANE_ADVANCE [Q=19.9]                     [+] 'CLAUDE TRUE COMBO (S2 -> S2 -> S1 -> ULT -> S2 BACK)' executed in 2736
+.7ms (Exit code: 0)                                                                                                                    [*] FPS: 24.6
+ | � 215 | K/D: 2/0 | Q-ROAM: LANE_ADVANCE [Q=19.9]                                                                                   [� ШТРАФ ЗА БЕ
+ЗДЕЙСТВИЕ] Долго бродит без пользы! -10 морковок. Баланс: 205 | LVL 3                                                                [� ОБУЧЕНИЕ МАР
+ШРУТА] Действие 'LANE_ADVANCE' в состоянии 'SCOUT_MID_SEARCH' получило Q=11.2 (EMPTY PATH (IDLE))                                   [*] FPS: 21.5 |
+� 205 | K/D: 2/0 | Q-ROAM: LANE_PUSH [Q=-3.6]                                                                                      PS C:\Users\user\
+Desktop\скрипт(mlbb)>

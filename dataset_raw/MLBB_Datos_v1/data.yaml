@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 103
+names: ['Aamon', 'Adc_Aliado', 'Adc_Enemigo', 'Alpha', 'Alucard', 'Arbusto', 'Argos', 'Arlott', 'Aurora', 'Badang', 'Balmont', 'Bane', 'Barats', 'Belerick', 'Buff_Red', 'Buff_blue', 'Cangrejo_Exp', 'Cangrejo_Oro', 'Cecilion', 'Chang-e', 'Clint', 'Dyrrot', 'EXP_Lane', 'Energia', 'Esbirro_Aliado', 'Esbirro_Enemigo', 'Esbirro_Jungla', 'Estes', 'Eudora', 'Exp_Aliado', 'Exp_Enemigo', 'Franco', 'Freddrin', 'Furia_Gattotkaka', 'Gattotkaka', 'Gold_Lane', 'Gord', 'Granger', 'Guinever', 'Gusion', 'HP_Aliado', 'HP_Enemigo', 'HP_Heroe_Principal', 'Hanabi', 'Hayabusa', 'Hechizo_Batalla', 'Heroe_Muerto', 'Jawhead', 'Julian', 'Jungla_Aliado', 'Jungla_Enemigo', 'Karina', 'Karry', 'Lancelot', 'Layla', 'Lechuga', 'Lesly', 'Ling', 'Lolita', 'Lord', 'Lord_Activo', 'Lord_Mapa', 'Lord_Mejorado_Mapa', 'Lord_Vexana', 'Mana', 'Matilda', 'Mid_Aliado', 'Mid_Enemigo', 'Minimapa', 'Minotauro', 'Miya', 'Moskov', 'Nana', 'Natalia', 'Natan', 'Nexo_Aliado', 'Nexo_Enemigo', 'Nolan', 'Pasiva_Granger', 'Pasiva_Guinever', 'Pasiva_Phoveus', 'Phoveus', 'Roamer_Aliado', 'Roamer_Enemigo', 'Skill1', 'Skill2', 'Skill3', 'Suyou', 'Terizla', 'Tigreal', 'Torre_Aliada', 'Torre_Enemiga', 'Torre_destruida', 'Tortuga', 'Tortuga_mapa', 'Urano', 'Vale', 'Vexana', 'Wanwan', 'Yu Zhong', 'Zhuxin', 'Zylong', 'skill3']
+
+roboflow:
+  workspace: s-workspace-gwhsm
+  project: mlbb-datos-t5fpv
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/s-workspace-gwhsm/mlbb-datos-t5fpv/dataset/1
