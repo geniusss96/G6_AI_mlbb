@@ -17,23 +17,30 @@ import os
 import atexit
 import threading
 from typing import Tuple, Optional
+from config.config import (
+    JOYSTICK_CENTER_X,
+    JOYSTICK_CENTER_Y,
+    JOYSTICK_RADIUS,
+    ADB_BINARY,
+    DEVICE_SERIAL,
+)
 
 
 class JoystickController:
     # --------------------------------------------------------------------------
     # Точные координаты центра джойстика в альбомной ориентации 1544x720
     # --------------------------------------------------------------------------
-    JOYSTICK_CENTER_X: int = 288
-    JOYSTICK_CENTER_Y: int = 560
-    JOYSTICK_RADIUS: int = 110  # Радиус отклонения стика в пикселях
+    JOYSTICK_CENTER_X: int = JOYSTICK_CENTER_X
+    JOYSTICK_CENTER_Y: int = JOYSTICK_CENTER_Y
+    JOYSTICK_RADIUS: int = JOYSTICK_RADIUS
 
     def __init__(
         self,
         center_x: int = JOYSTICK_CENTER_X,
         center_y: int = JOYSTICK_CENTER_Y,
         radius: int = JOYSTICK_RADIUS,
-        adb_binary: str = "adb",
-        device_serial: Optional[str] = "R3CT90BBMTX"
+        adb_binary: str = ADB_BINARY,
+        device_serial: Optional[str] = DEVICE_SERIAL
     ):
         self.center_x = center_x
         self.center_y = center_y

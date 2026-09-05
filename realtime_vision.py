@@ -39,48 +39,39 @@ from joystick_controller import JoystickController
 from claude_brain import ClaudeRLBrain
 
 
-# ============================================================================
-# КОНФИГУРАЦИЯ ТАКТИЧЕСКОГО ИНТЕЛЛЕКТА
-# ============================================================================
-WEIGHTS_PATH = r"c:\Users\user\Desktop\скрипт(mlbb)\runs\detect\mlbb_training\v4_run\weights\best.pt"
-
-# Пороги уверенности детекции
-CONF_HERO_THRESHOLD = 0.40      # Порог для вражеских героев (YOLO + Hue Filter)
-CONF_MINION_THRESHOLD = 0.40    # Порог для вражеских миньонов (строгий фильтр против союзных)
-CONF_BUFF_THRESHOLD = 0.22      # Порог для лесных баффов и монстров
-CONF_TURRET_THRESHOLD = 0.25    # Порог для вражеских вышек
-YOLO_DEVICE = '0'
-YOLO_IMGSZ = 480                # Оптимизированный размер для 2x FPS
-DEVICE_SERIAL = "R3CT90BBMTX"
-
-# Визуальное окно ИИ:
-# True = Окно с разметкой боксов, дистанциями, статусом и морковками активно
-SHOW_PREVIEW_WINDOW = True
-
-# Размеры окна предпросмотра OpenCV (под монитор 1366x768)
-PREVIEW_WIDTH = 480
-PREVIEW_HEIGHT = 270
-
-# Тактические дистанции боя (для экрана 1544x720)
-KITING_DANGER_DIST_PX = 280.0    # Опасная дистанция ближнего боя -> кайтить назад!
-SWEET_SPOT_MAX_DIST_PX = 430.0   # Идеальная дистанция стрельбы Клода
-TURRET_DANGER_DIST_PX = 420.0    # Радиус опасности вражеской вышки
-
-# Интервалы действий
-JOYSTICK_STEP_SEC = 0.28         # Частота импульсов джойстика (плавный непрерывный бег)
-BASIC_ATTACK_COOLDOWN_SEC = 0.20 # 5 выстрелов в секунду
-COMBO_COOLDOWN_SEC = 10.0        # Пауза между фулл-комбо
-
+from config.config import (
+    WEIGHTS_PATH,
+    CONF_HERO_THRESHOLD,
+    CONF_MINION_THRESHOLD,
+    CONF_BUFF_THRESHOLD,
+    CONF_TURRET_THRESHOLD,
+    YOLO_DEVICE,
+    YOLO_IMGSZ,
+    DEVICE_SERIAL,
+    SHOW_PREVIEW_WINDOW,
+    PREVIEW_WIDTH,
+    PREVIEW_HEIGHT,
+    KITING_DANGER_DIST_PX,
+    SWEET_SPOT_MAX_DIST_PX,
+    TURRET_DANGER_DIST_PX,
+    JOYSTICK_STEP_SEC,
+    BASIC_ATTACK_COOLDOWN_SEC,
+    COMBO_COOLDOWN_SEC,
+    S1_COOLDOWN_SEC,
+    S2_COOLDOWN_SEC,
+    ULT_COOLDOWN_SEC,
+    LEVELUP_INTERVAL_SEC,
+    REGEN_COOLDOWN_SEC,
+    ROAM_LEG_DURATION,
+    IDLE_PENALTY_INTERVAL,
+    SKILL_CHECK_COORDS,
+)
 
 # ============================================================================
 # ДЕТЕКТОР ГОТОВНОСТИ СПОСОБНОСТЕЙ (SKILL STATE CHECKER)
 # ============================================================================
 class SkillStateChecker:
-    SKILL_COORDS = {
-        "s1": (1088, 540),
-        "s2": (1228, 392),
-        "ult": (1051, 375)
-    }
+    SKILL_COORDS = SKILL_CHECK_COORDS
 
     @staticmethod
     def get_readiness(frame) -> dict:
@@ -417,13 +408,6 @@ def main():
     last_skill_levelup_time = 0.0
     last_regen_time = 0.0
     frame_count = 0
-
-    # Реальные боевые кулдауны способностей Клода (Anti-Spam Guard)
-    S1_COOLDOWN_SEC = 5.5         # Кулдаун С1 (Искусство воровства: 5.5с)
-    S2_COOLDOWN_SEC = 10.0        # Кулдаун С2 (Зеркальное отражение: 10.0с)
-    ULT_COOLDOWN_SEC = 40.0       # Кулдаун Ультимейта (Буйство стрельбы: 40.0с)
-    LEVELUP_INTERVAL_SEC = 25.0   # Прокачка скиллов раз в 25 секунд
-    REGEN_COOLDOWN_SEC = 60.0     # Кулдаун кнопки Восстановления (Хил: 60.0с)
 
     cached_yolo_boxes = []
     corpse_zones = []  # list of {"pos": (x, y), "expiry": timestamp}

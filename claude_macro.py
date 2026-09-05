@@ -88,6 +88,24 @@ class InputHumanizer:
         return int(round(clamped))
 
 
+from config.config import (
+    DEVICE_SERIAL,
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    SWAP_XY,
+    COORD_SKILL_1,
+    COORD_SKILL_2,
+    COORD_ULTIMATE,
+    COORD_FLICKER,
+    COORD_BASIC_ATTACK,
+    SPATIAL_JITTER_SIGMA,
+    SPATIAL_MAX_OFFSET,
+    HOLD_DURATION_MIN_MS,
+    HOLD_DURATION_MAX_MS,
+    HOLD_DURATION_MEAN_MS,
+)
+
+
 # ==============================================================================
 # CLAUDE CONFIGURATION & CALIBRATED COORDINATES
 # ==============================================================================
@@ -95,36 +113,32 @@ class ClaudeConfig:
     # --------------------------------------------------------------------------
     # Device Identification & Resolution
     # --------------------------------------------------------------------------
-    # Optional ADB device serial (leave empty if only one phone is connected)
-    DEVICE_SERIAL = ""
-
-    # Reference resolution of host screen (Exact physical size of user's device)
-    SCREEN_WIDTH = 1544
-    SCREEN_HEIGHT = 720
+    DEVICE_SERIAL = DEVICE_SERIAL
+    SCREEN_WIDTH = SCREEN_WIDTH
+    SCREEN_HEIGHT = SCREEN_HEIGHT
 
     # --------------------------------------------------------------------------
     # Orientation & Coordinate Space Translation Toggle
     # --------------------------------------------------------------------------
-    # Uses 720x1544 Landscape (rotation 3) hardware transformation
-    SWAP_XY = True
+    SWAP_XY = SWAP_XY
 
     # --------------------------------------------------------------------------
     # Claude HUD Button Coordinates (User's Exact Calibrated Values)
     # --------------------------------------------------------------------------
-    COORD_SKILL_1 = (180, 1088)       # Art of Thievery (Искусство воровства: 1088, 540)
-    COORD_SKILL_2 = (328, 1228)       # Battle Mirror Image (Зеркальное отражение)
-    COORD_ULTIMATE = (345, 1051)      # Blazing Duet (Буйство стрельбы)
-    COORD_FLICKER = (93, 850)         # Battle Spell: Flicker (Вспышка)
-    COORD_BASIC_ATTACK = (160, 1350)  # Basic Attack Button (Dead center: 1350, 560)
+    COORD_SKILL_1 = COORD_SKILL_1
+    COORD_SKILL_2 = COORD_SKILL_2
+    COORD_ULTIMATE = COORD_ULTIMATE
+    COORD_FLICKER = COORD_FLICKER
+    COORD_BASIC_ATTACK = COORD_BASIC_ATTACK
 
     # --------------------------------------------------------------------------
     # Anti-Detection Jitter Parameters
     # --------------------------------------------------------------------------
-    SPATIAL_JITTER_SIGMA = 3.0    # Gaussian standard deviation in pixels
-    SPATIAL_MAX_OFFSET = 6        # Max allowed pixel offset from button center
-    HOLD_DURATION_MIN_MS = 45.0   # Minimum glass contact time
-    HOLD_DURATION_MAX_MS = 95.0   # Maximum glass contact time
-    HOLD_DURATION_MEAN_MS = 65.0  # Average touch press duration
+    SPATIAL_JITTER_SIGMA = SPATIAL_JITTER_SIGMA
+    SPATIAL_MAX_OFFSET = SPATIAL_MAX_OFFSET
+    HOLD_DURATION_MIN_MS = HOLD_DURATION_MIN_MS
+    HOLD_DURATION_MAX_MS = HOLD_DURATION_MAX_MS
+    HOLD_DURATION_MEAN_MS = HOLD_DURATION_MEAN_MS
 
 
 # ==============================================================================
