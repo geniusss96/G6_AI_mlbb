@@ -113,6 +113,96 @@ class TestQLearningCore(unittest.TestCase):
         self.assertEqual(new_ql.get_q("farm", "F1", "A2"), 20.0)
         self.assertEqual(new_ql.get_q("combat", "C1", "A3"), 30.0)
 
+    def test_read_only_api_zero_mutations(self):
+        """Read-only methods must NEVER insert states or mutate Q-tables."""
+        # Initial empty counts
+        self.assertEqual(len(self.ql.combat_q_table), 0)
+        self.assertFalse(self.ql.has_state("combat", "UNSEEN_STATE"))
+
+        # get_q query must not create state
+        val = self.ql.get_q("combat", "UNSEEN_STATE", "DIVE_ALL_IN", default=0.0)
+        self.assertEqual(val, 0.0)
+        self.assertEqual(len(self.ql.combat_q_table), 0)
+        self.assertFalse(self.ql.has_state("combat", "UNSEEN_STATE"))
+
+        # get_state_actions must not create state
+        actions = self.ql.get_state_actions("combat", "UNSEEN_STATE")
+        self.assertEqual(actions, {})
+        self.assertEqual(len(self.ql.combat_q_table), 0)
+
+        # get_table_snapshot must return an isolated copy
+        self.ql.set_q("combat", "KNOWN_STATE", "DIVE_ALL_IN", 40.0)
+        snapshot = self.ql.get_table_snapshot("combat")
+        snapshot["KNOWN_STATE"]["DIVE_ALL_IN"] = 999.0
+        self.assertEqual(self.ql.get_q("combat", "KNOWN_STATE", "DIVE_ALL_IN"), 40.0)
+
+    def test_explicit_init_state_and_reset_state(self):
+        """Verifies explicit state initialization and explicit deletion."""
+        defaults = {"ACTION_A": 10.0, "ACTION_B": 20.0}
+        created = self.ql.init_state("roam", "SCOUT_HOT_ZONE", defaults)
+        self.assertTrue(created)
+        self.assertTrue(self.ql.has_state("roam", "SCOUT_HOT_ZONE"))
+
+        # Second init call returns False and preserves existing values
+        self.ql.set_q("roam", "SCOUT_HOT_ZONE", "ACTION_A", 55.0)
+        second_call = self.ql.init_state("roam", "SCOUT_HOT_ZONE", defaults)
+        self.assertFalse(second_call)
+        self.assertEqual(self.ql.get_q("roam", "SCOUT_HOT_ZONE", "ACTION_A"), 55.0)
+
+        # Explicit reset removes the state
+        removed = self.ql.reset_state("roam", "SCOUT_HOT_ZONE")
+        self.assertTrue(removed)
+        self.assertFalse(self.ql.has_state("roam", "SCOUT_HOT_ZONE"))
+        self.assertFalse(self.ql.reset_state("roam", "SCOUT_HOT_ZONE"))
+
+    def test_load_and_read_q_brain_json_regression(self):
+        """Verifies that existing production q_brain.json is readable without schema change."""
+        import json
+        q_path = "q_brain.json"
+        if not os.path.exists(q_path):
+            self.skipTest("q_brain.json not found in workspace")
+
+        with open(q_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        ql = QLearningCore()
+        ql.load_tables(data)
+
+        self.assertGreater(len(ql.roam_q_table), 0)
+        self.assertGreater(len(ql.farm_q_table), 0)
+        self.assertGreater(len(ql.combat_q_table), 0)
+
+        # Verify known key lookups
+        self.assertTrue(ql.has_state("roam", "SCOUT_DEEP_PATROL"))
+        self.assertTrue(ql.has_state("combat", "DANGER_CLOSE_HIGH_COMBO_True"))
+        self.assertGreater(ql.get_q("combat", "DANGER_CLOSE_HIGH_COMBO_True", "KITE_AND_POKE"), 0.0)
+
+    def test_load_and_read_baseline_q_brain_json_regression(self):
+        """Verifies that data/q_brain_baseline.json is readable and remains unmodified."""
+        import hashlib
+        import json
+
+        baseline_path = os.path.join("data", "q_brain_baseline.json")
+        if not os.path.exists(baseline_path):
+            self.skipTest("data/q_brain_baseline.json not found")
+
+        with open(baseline_path, "rb") as f:
+            initial_hash = hashlib.sha256(f.read()).hexdigest()
+
+        with open(baseline_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        ql = QLearningCore()
+        ql.load_tables(data)
+
+        self.assertTrue(ql.has_state("roam", "SCOUT_HOT_ZONE"))
+        self.assertTrue(ql.has_state("farm", "CREEP_SWEET_SPOT_S1_True_SAFE"))
+
+        with open(baseline_path, "rb") as f:
+            post_hash = hashlib.sha256(f.read()).hexdigest()
+
+        self.assertEqual(initial_hash, post_hash, "Baseline must remain strictly untouched")
+
     def test_architecture_isolation(self):
         """brain.q_learning must not import hardware, actions, vision, or tactical trees."""
         import brain.q_learning as ql_mod
@@ -132,3 +222,4 @@ class TestQLearningCore(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
