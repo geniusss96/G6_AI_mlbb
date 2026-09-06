@@ -29,7 +29,8 @@ ADB_BINARY = os.getenv("MLBB_ADB_BINARY", "adb")
 # ==============================================================================
 WEIGHTS_PATH = os.getenv(
     "MLBB_WEIGHTS_PATH",
-    r"runs\detect\mlbb_training\v4_run\weights\best.pt"
+    r"models\yolo\v4\best.pt" if os.path.exists(r"models\yolo\v4\best.pt")
+    else r"runs\detect\mlbb_training\v4_run\weights\best.pt"
 )
 
 YOLO_DEVICE = "0"
