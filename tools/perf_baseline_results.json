@@ -1,0 +1,48 @@
+{
+  "stage": "24",
+  "device": "R3CT90BBMTX",
+  "yolo_device_config": "0",
+  "yolo_actual_device": "cpu",
+  "cuda_available": true,
+  "cuda_name": "NVIDIA P106-100",
+  "warm_ticks": 30,
+  "cold": {
+    "model_load_ms": 130.3,
+    "scrcpy_startup_ms": 1106.0,
+    "first_capture_ms": 40.44,
+    "first_inference_ms": 1053.53,
+    "second_inference_ms": 29.68,
+    "third_inference_ms": 25.56
+  },
+  "warm": {
+    "total_tick": {
+      "avg": 42.3,
+      "min": 36.7,
+      "max": 48.4,
+      "p50": 42.6,
+      "p95": 47.0
+    },
+    "capture": {
+      "avg": 9.02
+    },
+    "vision": {
+      "avg": 28.8,
+      "min": 23.3,
+      "max": 34.7,
+      "p50": 28.6,
+      "p95": 33.3
+    },
+    "adb_raw_motionevent": {
+      "avg": 0.01
+    },
+    "adb_raw_tap": {
+      "avg": 0.01
+    }
+  },
+  "effective_fps_no_sleep": 23.6,
+  "primary_bottleneck": "Vision/YOLO",
+  "secondary_bottleneck": "Capture",
+  "optimizations_applied": "none",
+  "q_brain_unchanged": true,
+  "q_brain_baseline_unchanged": true
+}
