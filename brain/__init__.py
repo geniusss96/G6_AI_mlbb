@@ -6,6 +6,7 @@ from brain.tactical import TacticalBrain
 from brain.v1_adapter import V1BrainAdapter
 from brain.state import TacticalState, TacticalStateBuilder
 from brain.q_learning import QLearningCore
+from brain.rewards import Reward, RewardCalculator
 
 __all__ = [
     "TacticalBrain",
@@ -13,4 +14,6 @@ __all__ = [
     "TacticalState",
     "TacticalStateBuilder",
     "QLearningCore",
+    "Reward",
+    "RewardCalculator",
 ]
