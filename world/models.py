@@ -39,6 +39,7 @@ class PlayerState:
     position: Vector2
     hp: HPObservation
     is_visible: bool = True
+    is_dead: bool = False
 
 
 @dataclass(frozen=True)

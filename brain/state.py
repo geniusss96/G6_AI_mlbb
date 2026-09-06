@@ -48,6 +48,7 @@ class TacticalState:
     is_near_base: bool
     nearest_enemy_id: Optional[int] = None
     nearest_minion_id: Optional[int] = None
+    is_player_visible: bool = True
 
 
 class TacticalStateBuilder:
@@ -84,10 +85,17 @@ class TacticalStateBuilder:
         # 1. Player state extraction
         if world_state.player:
             player_pos = world_state.player.position
-            is_dead = not world_state.player.is_visible
+            is_visible = bool(world_state.player.is_visible)
             hp_ratio = float(world_state.player.hp.value) if world_state.player.hp else 1.0
+            # LOST != DEAD: Temporary loss of vision/missing frames must never automatically mean player death.
+            # Confirmed player death requires explicit death flag or zero HP.
+            is_dead = getattr(world_state.player, "is_dead", False) or (
+                world_state.player.hp is not None
+                and world_state.player.hp.value <= 0.0
+            )
         else:
             player_pos = self.default_player_pos
+            is_visible = False
             is_dead = False
             hp_ratio = 1.0
 
@@ -163,4 +171,5 @@ class TacticalStateBuilder:
             is_near_base=bool(world_state.is_near_base),
             nearest_enemy_id=nearest_enemy_id,
             nearest_minion_id=nearest_minion_id,
+            is_player_visible=is_visible,
         )

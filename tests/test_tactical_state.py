@@ -50,6 +50,21 @@ class TestTacticalStateBuilder(unittest.TestCase):
         ts = self.builder.build(ws)
         self.assertTrue(ts.is_player_dead)
 
+    def test_lost_player_is_not_dead(self):
+        """LOST != DEAD: Missing vision / temporary loss must never mean player death."""
+        ws = WorldState(
+            timestamp=16.0,
+            player=PlayerState(
+                position=Vector2(500.0, 400.0),
+                hp=HPObservation(value=0.85, confidence=0.7, visible=True),
+                is_visible=False,  # Temporarily lost / occluded in bush
+            ),
+        )
+        ts = self.builder.build(ws)
+        self.assertFalse(ts.is_player_dead, "LOST != DEAD: temporary loss must not mean death")
+        self.assertFalse(ts.is_player_visible)
+        self.assertAlmostEqual(ts.player_hp_ratio, 0.85)
+
     def test_optional_player_fallback(self):
         ws = WorldState(timestamp=20.0, player=None)
         ts = self.builder.build(ws)
