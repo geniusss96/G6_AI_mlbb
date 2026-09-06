@@ -48,3 +48,8 @@ tools/perf_baseline_results.json
 
 # Log files
 logs/*.log
+
+# Stage 28 isolated RL artifacts (experimental, never production)
+data/q_brain_isolated_stage28.json
+data/stage28_session_log.jsonl
+data/stage28_summary.json
