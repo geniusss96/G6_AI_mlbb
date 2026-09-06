@@ -38,6 +38,7 @@ from claude_macro import ClaudeMacroController
 from joystick_controller import JoystickController
 from claude_brain import ClaudeRLBrain
 from vision.capture import ScreenCapture
+from vision.detector import YoloDetector, Detection
 
 
 from config.config import (
@@ -336,10 +337,8 @@ def main():
         return
 
     print(f"[*] Загружаем нейросеть: {WEIGHTS_PATH}...")
-    model = YOLO(WEIGHTS_PATH)
-
-    # Карта классов
-    class_map = {v: k for k, v in model.names.items()}
+    detector = YoloDetector(weights_path=WEIGHTS_PATH)
+    class_map = detector.class_map
     hp_enemy_id = class_map.get("hp_enemy", 1)
     hp_self_id = class_map.get("hp_self", 0)
     turret_enemy_id = class_map.get("turret_enemy", 4)
@@ -383,7 +382,7 @@ def main():
     last_regen_time = 0.0
     frame_count = 0
 
-    cached_yolo_boxes = []
+    cached_detections: list[Detection] = []
     corpse_zones = []  # list of {"pos": (x, y), "expiry": timestamp}
     last_known_enemy_time = 0.0
     last_attacked_enemy_pos = None
@@ -465,17 +464,13 @@ def main():
                 ult_ok = skills_ready.get("ult", False) and ((now - last_combo_time) >= ULT_COOLDOWN_SEC)
                 can_full_combo = s2_ok and ult_ok
 
-                # 3. Инференс нейросети YOLOv8 (FP16 с пропуском через кадр для высокого FPS)
-                if frame_count % 2 == 0 or not cached_yolo_boxes:
-                    results = model.predict(
-                        source=frame,
-                        device=YOLO_DEVICE,
+                # 3. Инференс нейросети YOLOv8 через vision.detector (FP16 с пропуском через кадр)
+                if frame_count % 2 == 0 or not cached_detections:
+                    cached_detections = detector.detect(
+                        frame=frame,
                         conf=min(CONF_HERO_THRESHOLD, CONF_BUFF_THRESHOLD),
-                        verbose=False,
-                        imgsz=YOLO_IMGSZ,
                         half=True
                     )
-                    cached_yolo_boxes = results[0].boxes
 
                 annotated_frame = frame.copy()
 
@@ -492,10 +487,10 @@ def main():
                 self_target = None
                 tron_self_detected = False
 
-                for box in cached_yolo_boxes:
-                    cls_id = int(box.cls[0])
-                    conf = float(box.conf[0])
-                    xywh = box.xywh[0].tolist()
+                for det in cached_detections:
+                    cls_id = det.class_id
+                    conf = det.confidence
+                    xywh = det.xywh
 
                     # Фильтр интерфейса (HUD Exclusion Mask)
                     if not is_valid_battlefield_target(xywh[0], xywh[1], xywh[2], xywh[3], frame_w, frame_h):
