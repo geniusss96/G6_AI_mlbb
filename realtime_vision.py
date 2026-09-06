@@ -37,6 +37,7 @@ if sys.platform == "win32":
 from claude_macro import ClaudeMacroController
 from joystick_controller import JoystickController
 from claude_brain import ClaudeRLBrain
+from vision.capture import ScreenCapture
 
 
 from config.config import (
@@ -90,44 +91,17 @@ class SkillStateChecker:
 
 
 # ============================================================================
-# СИСТЕМНЫЕ ФУНКЦИИ ОКНА SCRCPY
+# СИСТЕМНЫЕ ФУНКЦИИ ОКНА SCRCPY (Делегирование в vision.capture)
 # ============================================================================
-def find_scrcpy_window():
-    hwnd = win32gui.FindWindow("SDL_app", None)
-    if not hwnd:
-        def enum_cb(h, acc):
-            if win32gui.IsWindowVisible(h):
-                txt = win32gui.GetWindowText(h)
-                cls = win32gui.GetClassName(h)
-                if cls == "SDL_app" or "scrcpy" in txt.lower() or "sm-" in txt.lower():
-                    acc.append(h)
-        acc = []
-        win32gui.EnumWindows(enum_cb, acc)
-        if acc:
-            hwnd = acc[0]
+_screen_capture = ScreenCapture()
 
-    if hwnd and win32gui.IsWindowVisible(hwnd):
-        rect = win32gui.GetWindowRect(hwnd)
-        # Если окно свернуто в панель задач (-32000, -32000) -> автоматически восстанавливаем
-        if rect[0] < -1000 or rect[1] < -1000:
-            win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
-            time.sleep(0.1)
-            rect = win32gui.GetWindowRect(hwnd)
-        if rect[0] > -1000 and rect[1] > -1000:
-            return hwnd
-    return None
+
+def find_scrcpy_window():
+    return _screen_capture.find_scrcpy_window()
 
 
 def get_client_area(hwnd):
-    try:
-        left, top, right, bottom = win32gui.GetClientRect(hwnd)
-        width, height = right - left, bottom - top
-        if width <= 0 or height <= 0:
-            return None
-        screen_left, screen_top = win32gui.ClientToScreen(hwnd, (left, top))
-        return {"top": max(0, screen_top), "left": max(0, screen_left), "width": width, "height": height}
-    except Exception:
-        return None
+    return _screen_capture.get_client_area(hwnd)
 
 
 def is_valid_battlefield_target(x_center: float, y_center: float, box_w: float, box_h: float, frame_w: int, frame_h: int) -> bool:
@@ -460,30 +434,21 @@ def main():
     print("  - Авто-прокачка способностей и тактический авто-хил\n")
 
     try:
-        with mss.mss() as sct:
+        with ScreenCapture() as capture:
             while True:
                 start_time = time.time()
 
-                # 1. Захват окна scrcpy
-                hwnd = find_scrcpy_window()
-                if not hwnd:
-                    print(f"\r[!] Окно scrcpy не найдено. Ожидание...", end="", flush=True)
-                    time.sleep(0.5)
+                # 1. Захват окна scrcpy и нормализация кадра в 1544x720 через vision.capture
+                frame = capture.grab()
+                if frame is None:
+                    hwnd = capture.find_scrcpy_window()
+                    if not hwnd:
+                        print(f"\r[!] Окно scrcpy не найдено. Ожидание...", end="", flush=True)
+                        time.sleep(0.5)
+                    else:
+                        time.sleep(0.1)
                     continue
 
-                monitor = get_client_area(hwnd)
-                if not monitor or monitor["width"] <= 0 or monitor["height"] <= 0:
-                    time.sleep(0.1)
-                    continue
-
-                sct_img = sct.grab(monitor)
-                frame = np.array(sct_img)
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGRA2BGR)
-                frame = np.ascontiguousarray(frame)
-                # Нормализация разрешения под эталонный экран игры (1544x720):
-                # Гарантирует 100% точность работы сенсора способностей, дальностей кайта и масок
-                if frame.shape[1] != 1544 or frame.shape[0] != 720:
-                    frame = cv2.resize(frame, (1544, 720), interpolation=cv2.INTER_LINEAR)
                 frame_h, frame_w = frame.shape[:2]
 
                 now = time.time()
