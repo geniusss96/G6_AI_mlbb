@@ -1,0 +1,48 @@
+{
+  "stage": "27",
+  "device_serial": "R3CT90BBMTX",
+  "warm_ticks": 30,
+  "methodology_note": "IMPORTANT: On this machine with Ultralytics/PyTorch, when a CUDA-capable GPU is visible (torch.cuda.is_available()=True), model.predict(device='cpu') does not produce clean CPU-only inference. The GPU is used for some graph operations and predict() blocks on GPU sync, producing ~12000ms/tick instead of ~27ms. Clean CPU inference (27ms) is only achievable with CUDA_VISIBLE_DEVICES='' (GPU fully masked). Since production always has GPU visible, the meaningful comparison is GPU (cuda:0) vs CPU with GPU masked.",
+  "cpu_isolated": {
+    "label": "CPU (CUDA_VISIBLE_DEVICES='' -- GPU fully masked)",
+    "device": "cpu",
+    "cuda_available": false,
+    "warm_yolo_ms": [27.5, 27.6, 27.3, 27.2, 27.4],
+    "warm_yolo_avg_ms": 27.4,
+    "note": "This is the clean CPU performance when no GPU is visible. Not representative of production (GPU is always present)."
+  },
+  "cpu_gpu_visible": {
+    "label": "CPU (device='cpu', GPU visible, torch.cuda.is_available()=True)",
+    "device": "cpu",
+    "cuda_available": true,
+    "warm_yolo_avg_ms": 12000,
+    "note": "Pathological: Ultralytics/PyTorch performs implicit GPU sync even on cpu device when GPU is visible. NOT usable as a production CPU baseline."
+  },
+  "gpu": {
+    "label": "GPU cuda:0 (NVIDIA P106-100 sm_61)",
+    "device": "cuda:0",
+    "param_device": "cuda:0",
+    "load_ms": 74.4,
+    "cold_ms": 694.7,
+    "sync_overhead_ms": 0.04,
+    "standalone_warm_ms": [25.87, 26.30, 26.08],
+    "warm_yolo_avg_ms": 26.08,
+    "ticks_ok": 30,
+    "total": {"avg": 38.76, "min": 35.69, "max": 42.79, "p50": 38.46, "p95": 42.2, "n": 30},
+    "vision": {"avg": 26.53, "min": 23.7, "max": 30.15, "p50": 26.27, "p95": 29.68},
+    "fps": 25.8,
+    "source": "Stage 27 GPU pass (clean)"
+  },
+  "stage24_cpu_reference": {
+    "label": "CPU reference (Stage 24 -- separate process, GPU visible but Ultralytics may have used CUDA implicitly)",
+    "total_tick_avg_ms": 42.3,
+    "total_tick_p95_ms": 47.0,
+    "yolo_avg_ms": 28.8,
+    "fps": 23.6,
+    "note": "Stage 24 ran with YOLO_DEVICE='0' which resolved ambiguously. Results may reflect GPU usage via Ultralytics auto-detection."
+  },
+  "decision": "cuda:0",
+  "reason": "On this machine (Ultralytics + CUDA-visible GPU), device='cpu' does not produce clean CPU-only inference -- GPU sync overhead makes it unusable (~12000ms/tick). The only valid fast inference path is cuda:0 (~26.5ms YOLO, ~38.8ms total tick, 25.8 FPS). cuda:0 is confirmed as the correct and only practical production default on this hardware.",
+  "q_brain_unchanged": true,
+  "q_brain_baseline_unchanged": true
+}

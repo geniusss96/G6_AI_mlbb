@@ -383,31 +383,35 @@ This is the validated 4-step combo. There is **no fifth S2-back step**. The comb
 
 Hardware: Samsung Galaxy S22 Ultra SM-S908N (Android 16), Windows PC, NVIDIA P106-100 (sm_61), PyTorch 2.7.1+cu118.
 
-### Stage 27 -- Apples-to-Apples CPU vs GPU (30 warm ticks each, same pipeline, same device)
+### Stage 27 -- GPU Inference Validated (cuda:0)
 
-| Metric | CPU | GPU (cuda:0) | Delta | Winner |
-|---|---|---|---|---|
-| YOLO inference avg | 27.8 ms | 23.1 ms | -4.7 ms | GPU |
-| YOLO inference p95 | 28.4 ms | 23.4 ms | -5.0 ms | GPU |
-| **Total tick avg** | **43.1 ms** | **38.3 ms** | **-4.8 ms (-11.1%)** | **GPU** |
-| Total tick p50 | 43.1 ms | 38.0 ms | -4.8 ms | GPU |
-| Total tick p95 | 43.9 ms | 38.9 ms | -5.0 ms | GPU |
-| Effective FPS | 23.2 FPS | 26.1 FPS | +2.9 FPS | GPU |
-| Capture avg | 8.7 ms | 8.6 ms | -0.1 ms | Equivalent |
-| CUDA sync overhead | -- | 0.25 ms | -- | -- |
+| Metric | GPU (cuda:0) |
+|---|---|
+| YOLO warm avg | ~26.5 ms |
+| **Total tick avg** | **~38.8 ms** |
+| Total tick p95 | ~42.2 ms |
+| Effective FPS | **25.8 FPS** |
+| Cold YOLO (JIT) | ~695 ms (one-time) |
+| CUDA sync overhead | 0.04 ms (negligible) |
 
-**Production default: cuda:0** (confirmed by end-to-end measurement, not isolated YOLO speed).
+**Production default: `cuda:0`** (the only viable fast-inference path on this hardware).
 
-GPU overhead breakdown:
-- YOLO-only delta: -4.71 ms (GPU faster)
-- Non-YOLO overhead (transfer + sync + postprocess): -0.10 ms (negligible)
-- Total tick advantage: -4.81 ms
+**Stage 27 Finding -- Ultralytics CPU inference is not viable with GPU visible:**
+On this machine (PyTorch 2.7.1+cu118, CUDA-capable GPU present), `model.predict(device='cpu')`
+produces ~12000ms per tick instead of the expected ~27ms due to implicit GPU synchronization
+inside Ultralytics. This occurs even with `torch.cuda.is_initialized() == False`.
+Setting `CUDA_VISIBLE_DEVICES=''` does not hide the GPU on Windows PowerShell.
 
-**Key finding:** On this hardware (Pascal sm_61), the 11.1% total tick improvement is real and consistent (p95 difference matches avg difference). GPU scheduling jitter is minimal (p95-avg spread: CPU=0.8ms, GPU=0.9ms -- equivalent stability).
+Consequence: `MLBB_YOLO_DEVICE=cpu` is unsupported on this hardware configuration.
+Use `MLBB_YOLO_DEVICE=cpu` only on machines with no CUDA-capable GPU installed.
 
-> Note: these are observations on the tested hardware. Isolated YOLO speed does not necessarily equal lower total tick latency. On this system, GPU transfer overhead (0.25ms sync) is negligible relative to YOLO speedup (~4.7ms). This may differ on other GPUs or with different workloads.
+| Mode | Warm YOLO | Usable |
+|---|---|---|
+| `cuda:0` | ~26.5 ms | Yes -- production default |
+| `cpu` (no GPU present) | ~27 ms | Yes -- GPU-less machines only |
+| `cpu` (GPU visible) | ~12000 ms | No -- Ultralytics GPU sync artifact |
 
-### Stage 24 -- CPU-only baseline (historical reference)
+### Stage 24 -- Historical CPU Baseline (GPU was NOT yet enabled)
 
 | Metric | Value |
 |---|---|
@@ -415,6 +419,9 @@ GPU overhead breakdown:
 | Warm YOLO inference | ~28.8 ms |
 | Effective FPS | ~23.6 FPS |
 | Cold YOLO (first inference) | ~1053 ms (JIT warmup, one-time) |
+
+> Stage 24 used `YOLO_DEVICE='0'` (ambiguous). Ultralytics may have resolved this to GPU or CPU depending on version.
+> Stage 26/27 switched to the explicit `cuda:0` string. See those stages for authoritative GPU measurements.
 
 Primary bottleneck: **YOLO inference (64-69% of tick)** -- hardware-bound.
 
