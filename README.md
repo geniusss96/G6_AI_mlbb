@@ -189,7 +189,9 @@ pip install -r requirements.txt
 - `torch` / `torchvision` compatible with your hardware (CPU or CUDA)
 - No system-level `adb` required — bundled `tools/scrcpy/adb.exe` is used
 
-> **Note on GPU inference:** `torch.cuda.is_available() = True` does NOT guarantee YOLO runs on GPU. Verify the actual inference device after loading the model. On tested hardware (NVIDIA P106-100), YOLO ran on CPU despite CUDA being available.
+> **GPU inference (Stage 26):** `YOLO_DEVICE = "cuda:0"` is the production default (env var `MLBB_YOLO_DEVICE`). `YoloDetector` raises `RuntimeError` at startup if CUDA is requested but unavailable (`YOLO_CUDA_STRICT=True`). For CPU-only environments, set `MLBB_YOLO_DEVICE=cpu` and `MLBB_YOLO_CUDA_STRICT=0`. Note: Ultralytics moves model weights to the configured device on the **first** `.predict()` call — `parameters().device` shows `cpu` before that call. Verify the effective device after first inference.
+
+> **P106-100 CUDA confirmed (Stage 24.5/26):** NVIDIA P106-100 (Pascal, sm_61) runs YOLO CUDA inference correctly with PyTorch 2.7.1+cu118. `sm_61` is natively compiled into that PyTorch build. Warm CUDA inference: ~24 ms on the tested environment. A previous note suggesting this card may not support CUDA was incorrect — it observed parameters on `cpu` before the first forward pass, which is normal Ultralytics lazy-transfer behaviour.
 
 ---
 
@@ -377,25 +379,35 @@ This is the validated 4-step combo. There is **no fifth S2-back step**. The comb
 
 ---
 
-## P. Performance Baseline (Stage 24 — Environment-Specific)
+## P. Performance Baseline (Environment-Specific)
 
-Measured on: Samsung Galaxy S22 Ultra SM-S908N (Android 16), Windows PC with NVIDIA P106-100, YOLOv8 inference on CPU.
+Hardware: Samsung Galaxy S22 Ultra SM-S908N (Android 16), Windows PC, NVIDIA P106-100 (sm_61), PyTorch 2.7.1+cu118.
+
+### Stage 24 -- CPU inference (YOLO was running on CPU)
 
 | Metric | Value |
 |---|---|
-| Warm total tick | ≈ 42.3 ms (p95: 47.0 ms) |
-| Warm YOLO inference | ≈ 28.8 ms (p95: 33.3 ms) |
-| Capture (mss) | ≈ 9.0 ms |
-| Effective FPS (no sleep) | ≈ 23.6 FPS |
-| Cold YOLO (first inference) | ≈ 1053 ms (JIT warmup — one-time only) |
-| Model load | ≈ 130 ms (one-time) |
-| ADB stdin dispatch | < 0.1 ms (fire-and-forget) |
+| Warm total tick | ~42.3 ms (p95: 47.0 ms) |
+| Warm YOLO inference | ~28.8 ms (p95: 33.3 ms) |
+| Capture (mss) | ~9.0 ms |
+| Effective FPS (no sleep) | ~23.6 FPS |
+| Cold YOLO (first inference) | ~1053 ms (JIT warmup, one-time) |
 
-> These values are **observations on the tested hardware**, not universal guarantees. YOLO performance varies significantly by hardware, CUDA availability, and inference device. ADB dispatch latency does not represent full device round-trip time.
+### Stage 26 -- GPU inference (cuda:0, NVIDIA P106-100 sm_61)
 
-Primary bottleneck: **YOLO inference (68% of tick time)** — hardware-bound. Secondary: **screen capture (21%)**.
+| Metric | Value |
+|---|---|
+| Warm YOLO inference (5-call avg) | ~24.9 ms |
+| Cold YOLO (first inference, JIT) | ~824 ms (one-time) |
+| Warm total tick (30-tick bench) | ~46.5 ms (p95: 58.1 ms) |
+| Effective FPS (no sleep) | ~21.5 FPS |
+| GPU speedup on YOLO only | ~1.2x vs CPU baseline |
 
----
+> GPU total tick is slightly higher than CPU due to memory transfer overhead on Pascal (no tensor cores). Net system throughput gain is within measurement noise for this GPU generation.
+
+> All values are observations on the tested hardware, not universal guarantees. ADB dispatch latency is not full device round-trip time.
+
+Primary bottleneck: **YOLO inference (69% of tick)** -- hardware-bound. Secondary: **screen capture (20%)**.
 
 ## Q. Hotkeys (V1 Legacy Runtime Only)
 

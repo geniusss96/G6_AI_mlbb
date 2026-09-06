@@ -45,7 +45,14 @@ WEIGHTS_PATH = os.getenv(
     else r"runs\detect\mlbb_training\v4_run\weights\best.pt"
 )
 
-YOLO_DEVICE = "0"
+# Explicit CUDA device for YOLO inference (overridable via env var MLBB_YOLO_DEVICE).
+# Use "cuda:0" for GPU inference, "cpu" to force CPU.
+YOLO_DEVICE = os.getenv("MLBB_YOLO_DEVICE", "cuda:0")
+
+# When True: raise RuntimeError if CUDA is requested but unavailable (production default).
+# Set MLBB_YOLO_CUDA_STRICT=0 to allow CPU fallback in CI or environments without GPU.
+YOLO_CUDA_STRICT = os.getenv("MLBB_YOLO_CUDA_STRICT", "1").strip() not in ("0", "false", "False", "no")
+
 YOLO_IMGSZ = 480
 
 CONF_HERO_THRESHOLD = 0.40

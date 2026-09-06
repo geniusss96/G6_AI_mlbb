@@ -13,6 +13,7 @@ from ultralytics import YOLO
 from config.config import (
     WEIGHTS_PATH,
     YOLO_DEVICE,
+    YOLO_CUDA_STRICT,
     YOLO_IMGSZ,
     CONF_HERO_THRESHOLD,
     CONF_BUFF_THRESHOLD,
@@ -59,6 +60,15 @@ class Detection:
 class YoloDetector:
     """
     YOLOv8 inference wrapper for MLBB battlefield entity recognition.
+
+    Device selection:
+        - Configured via YOLO_DEVICE (default "cuda:0").
+        - Overridable at construction time via the `device` argument.
+        - If CUDA is requested but unavailable, raises RuntimeError when
+          YOLO_CUDA_STRICT is True (production default).
+          Set MLBB_YOLO_CUDA_STRICT=0 to allow CPU fallback in CI/offline envs.
+        - Effective inference device is confirmed after the first .predict() call
+          (Ultralytics transfers model parameters to the configured device lazily).
     """
 
     def __init__(
@@ -66,15 +76,59 @@ class YoloDetector:
         weights_path: Optional[str] = None,
         device: Optional[str] = None,
         imgsz: Optional[int] = None,
+        cuda_strict: Optional[bool] = None,
     ):
         self.weights_path = weights_path or WEIGHTS_PATH
         self.device = device or YOLO_DEVICE
         self.imgsz = imgsz or YOLO_IMGSZ
+        self._cuda_strict = cuda_strict if cuda_strict is not None else YOLO_CUDA_STRICT
+
+        # --- CUDA availability guard ---
+        # Check before model load so we fail early with a clear message.
+        _is_cuda_device = (
+            isinstance(self.device, str)
+            and (self.device.startswith("cuda") or (self.device.isdigit() and self.device != "cpu"))
+        )
+        if _is_cuda_device:
+            try:
+                import torch
+                _cuda_available = torch.cuda.is_available()
+            except ImportError:
+                _cuda_available = False
+
+            if not _cuda_available:
+                if self._cuda_strict:
+                    raise RuntimeError(
+                        f"[YoloDetector] CUDA device requested ({self.device!r}) "
+                        f"but torch.cuda.is_available() is False. "
+                        f"Install a CUDA-enabled PyTorch build, or set "
+                        f"MLBB_YOLO_CUDA_STRICT=0 and MLBB_YOLO_DEVICE=cpu "
+                        f"to allow CPU fallback."
+                    )
+                # Non-strict mode: fall back to CPU with a clear warning
+                import warnings
+                warnings.warn(
+                    f"[YoloDetector] CUDA requested ({self.device!r}) but CUDA is "
+                    f"unavailable. Falling back to 'cpu' (YOLO_CUDA_STRICT=False).",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
+                self.device = "cpu"
 
         # Load Ultralytics model
         self.model = YOLO(self.weights_path)
         self.class_map: Dict[str, int] = {v: k for k, v in self.model.names.items()}
         self.names: Dict[int, str] = dict(self.model.names)
+
+        # Startup device diagnostic — printed at construction time
+        print(
+            f"[YoloDetector] configured device = {self.device!r} | "
+            f"weights = {self.weights_path}"
+        )
+        print(
+            "[YoloDetector] Note: model parameters move to the configured device "
+            "on the first .predict() call. Verify effective device after first inference."
+        )
 
     def detect(
         self,
@@ -88,7 +142,7 @@ class YoloDetector:
         Args:
             frame: Pre-normalized BGR image (1544x720).
             conf: Min confidence cutoff for inference. Defaults to min(CONF_HERO_THRESHOLD, CONF_BUFF_THRESHOLD).
-            half: Use FP16 half-precision inference.
+            half: Use FP16 half-precision inference (supported on CUDA; auto-disabled on CPU).
 
         Returns:
             List of Detection objects.
