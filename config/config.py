@@ -19,10 +19,22 @@ PREVIEW_HEIGHT = 270
 SHOW_PREVIEW_WINDOW = True
 
 # ==============================================================================
-# 01.2 Device / ADB Configuration
+# 01.2 Device / ADB & Scrcpy Configuration
 # ==============================================================================
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Bundled tools paths (tools/scrcpy)
+SCRCPY_DIR = os.path.join(PROJECT_ROOT, "tools", "scrcpy")
+SCRCPY_PATH = os.path.join(SCRCPY_DIR, "scrcpy.exe")
+ADB_PATH = os.path.join(SCRCPY_DIR, "adb.exe")
+
 DEVICE_SERIAL = os.getenv("MLBB_DEVICE_SERIAL", "R3CT90BBMTX")
-ADB_BINARY = os.getenv("MLBB_ADB_BINARY", "adb")
+# Authoritative V2 ADB source: bundled tools/scrcpy/adb.exe with root legacy fallback
+ADB_BINARY = os.getenv(
+    "MLBB_ADB_BINARY",
+    ADB_PATH if os.path.isfile(ADB_PATH)
+    else (os.path.join(PROJECT_ROOT, "adb.exe") if os.path.isfile(os.path.join(PROJECT_ROOT, "adb.exe")) else "adb")
+)
 
 # ==============================================================================
 # 01.3 YOLO Configuration

@@ -38,6 +38,7 @@ venv.bak/
 runs/
 training/runs/
 
-# Operating System files
+# Operating System & Archive files
 .DS_Store
 Thumbs.db
+*.zip

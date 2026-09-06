@@ -62,11 +62,11 @@ class JoystickController:
         """Автоматический поиск adb.exe в папке scrcpy или текущей директории."""
         if not shutil.which(self.adb_binary):
             candidates = [
+                os.path.join(os.getcwd(), "tools", "scrcpy", "adb.exe"),
+                os.path.join(os.getcwd(), "adb.exe"),
                 os.path.join(os.getcwd(), "scrcpy-win64-v4.1", "adb.exe"),
                 os.path.join(os.getcwd(), "scrcpy", "adb.exe"),
                 r"c:\Users\user\Desktop\platform-tools\adb.exe",
-                r"c:\Users\user\Desktop\scrcpy-win64-v4.1\adb.exe",
-                os.path.join(os.getcwd(), "adb.exe")
             ]
             for c in candidates:
                 if os.path.isfile(c):

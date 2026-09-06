@@ -14,7 +14,7 @@ import os
 import threading
 import atexit
 
-from config.config import ADB_BINARY, DEVICE_SERIAL
+from config.config import ADB_BINARY, ADB_PATH, DEVICE_SERIAL
 
 
 class ADBTransport:
@@ -50,14 +50,15 @@ class ADBTransport:
 
     def _find_adb_binary_if_needed(self) -> None:
         """Locates adb executable in workspace or system PATH if default binary not found."""
-        if not shutil.which(self.adb_binary):
+        if not shutil.which(self.adb_binary) and not os.path.isfile(self.adb_binary):
             candidates = [
+                ADB_PATH,
+                os.path.join(os.getcwd(), "tools", "scrcpy", "adb.exe"),
                 os.path.join(os.getcwd(), "adb.exe"),
                 os.path.join(os.getcwd(), "adb"),
                 os.path.join(os.getcwd(), "scrcpy-win64-v4.1", "adb.exe"),
                 os.path.join(os.getcwd(), "scrcpy", "adb.exe"),
                 r"c:\Users\user\Desktop\platform-tools\adb.exe",
-                r"c:\Users\user\Desktop\scrcpy-win64-v4.1\adb.exe",
             ]
             for c in candidates:
                 if os.path.isfile(c):
