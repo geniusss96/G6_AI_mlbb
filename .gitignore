@@ -42,3 +42,9 @@ training/runs/
 .DS_Store
 Thumbs.db
 *.zip
+
+# Ephemeral benchmark outputs (not canonical project artifacts)
+tools/perf_baseline_results.json
+
+# Log files
+logs/*.log

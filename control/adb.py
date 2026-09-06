@@ -58,7 +58,6 @@ class ADBTransport:
                 os.path.join(os.getcwd(), "adb"),
                 os.path.join(os.getcwd(), "scrcpy-win64-v4.1", "adb.exe"),
                 os.path.join(os.getcwd(), "scrcpy", "adb.exe"),
-                r"c:\Users\user\Desktop\platform-tools\adb.exe",
             ]
             for c in candidates:
                 if os.path.isfile(c):
