@@ -39,6 +39,7 @@ from joystick_controller import JoystickController
 from claude_brain import ClaudeRLBrain
 from vision.capture import ScreenCapture
 from vision.detector import YoloDetector, Detection
+from vision.skill_state import SkillStateChecker
 
 
 from config.config import (
@@ -70,25 +71,9 @@ from config.config import (
 )
 
 # ============================================================================
-# ДЕТЕКТОР ГОТОВНОСТИ СПОСОБНОСТЕЙ (SKILL STATE CHECKER)
+# ДЕТЕКТОР ГОТОВНОСТИ СПОСОБНОСТЕЙ (Делегирование в vision.skill_state)
 # ============================================================================
-class SkillStateChecker:
-    SKILL_COORDS = SKILL_CHECK_COORDS
-
-    @staticmethod
-    def get_readiness(frame) -> dict:
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        status = {}
-        for name, (cx, cy) in SkillStateChecker.SKILL_COORDS.items():
-            patch = hsv[max(0, cy - 8):min(frame.shape[0], cy + 8),
-                        max(0, cx - 8):min(frame.shape[1], cx + 8)]
-            if patch.size == 0:
-                status[name] = False
-                continue
-            mean_s = np.mean(patch[:, :, 1])
-            mean_v = np.mean(patch[:, :, 2])
-            status[name] = bool((mean_s > 130) and (mean_v > 75))
-        return status
+_skill_checker = SkillStateChecker()
 
 
 # ============================================================================
@@ -458,10 +443,10 @@ def main():
                     last_skill_levelup_time = now
 
                 # 2. Сенсор способностей со строгим таймером кулдаунов (Anti-Spam Guard)
-                skills_ready = SkillStateChecker.get_readiness(frame)
-                s1_ok = skills_ready.get("s1", False) and ((now - last_s1_time) >= S1_COOLDOWN_SEC)
-                s2_ok = skills_ready.get("s2", False) and ((now - last_s2_time) >= S2_COOLDOWN_SEC)
-                ult_ok = skills_ready.get("ult", False) and ((now - last_combo_time) >= ULT_COOLDOWN_SEC)
+                skill_state = _skill_checker.check(frame)
+                s1_ok = skill_state.s1_ready and ((now - last_s1_time) >= S1_COOLDOWN_SEC)
+                s2_ok = skill_state.s2_ready and ((now - last_s2_time) >= S2_COOLDOWN_SEC)
+                ult_ok = skill_state.ultimate_ready and ((now - last_combo_time) >= ULT_COOLDOWN_SEC)
                 can_full_combo = s2_ok and ult_ok
 
                 # 3. Инференс нейросети YOLOv8 через vision.detector (FP16 с пропуском через кадр)
