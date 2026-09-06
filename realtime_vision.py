@@ -40,6 +40,7 @@ from claude_brain import ClaudeRLBrain
 from vision.capture import ScreenCapture
 from vision.detector import YoloDetector, Detection
 from vision.skill_state import SkillStateChecker
+from vision.hp_detector import HPDetector, HPObservation
 
 
 from config.config import (
@@ -110,120 +111,23 @@ def is_valid_battlefield_target(x_center: float, y_center: float, box_w: float, 
     return True
 
 
+_hp_detector = HPDetector()
+
+
 def detect_red_hp_bars(frame: np.ndarray) -> list:
-    """
-    Оптический сенсор полосок здоровья врагов с фильтром монолитности и формы:
-    Отсекает рваные контуры мятого красного плаща мертвого Зилонга (solidity < 0.70)
-    и оставляет только реальные прямоугольные полоски здоровья.
-    """
-    h, w = frame.shape[:2]
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    return _hp_detector.detect_red_hp_bars(frame)
 
-    # Красный оттенок в MLBB (два диапазона тона H: 0..10 и 170..180)
-    mask1 = cv2.inRange(hsv, (0, 110, 110), (10, 255, 255))
-    mask2 = cv2.inRange(hsv, (170, 110, 110), (180, 255, 255))
-    mask = mask1 | mask2
 
-    # Исключение HUD:
-    mask[:int(h * 0.18), :] = 0
-    mask[int(h * 0.65):, int(w * 0.78):] = 0
-    mask[:int(h * 0.40), :int(w * 0.22)] = 0
-
-    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    boxes = []
-    for c in contours:
-        bx, by, bw, bh = cv2.boundingRect(c)
-        # Реальная полоска HP над головой: ширина 25..200px, тонкая высота 4..16px
-        if 25 <= bw <= 200 and 4 <= bh <= 16:
-            aspect = bw / float(bh)
-            area = cv2.contourArea(c)
-            solidity = area / float(bw * bh)
-            # Монолитная полоска здоровья: solidity >= 0.70 и aspect >= 2.8
-            # Мятый плащ на траве имеет рваный контур (solidity < 0.60)
-            if aspect >= 2.8 and solidity >= 0.70:
-                cx = bx + bw / 2.0
-                cy = by + bh / 2.0
-                boxes.append([cx, cy, float(bw), float(bh)])
-    return boxes
 def is_real_enemy_hp_bar(frame: np.ndarray, xywh: list) -> bool:
-    """
-    100% Цветовой фильтр вражеских героев (Enemy Hue Verification):
-    В MLBB у вражеских героев полоска здоровья СТРОГО КРАСНАЯ (red_ratio >= 0.10).
-    У союзников, ботов-тимейтов и своего Клода - полоска ЗЕЛЕНАЯ или СИНЯЯ.
-    Отсекает 100% союзных героев, исключая ложный бой на базе!
-    """
-    cx, cy, bw, bh = xywh
-    h, w = frame.shape[:2]
-    x1 = max(0, int(cx - bw / 2.0))
-    x2 = min(w, int(cx + bw / 2.0))
-    y1 = max(0, int(cy - bh / 2.0))
-    y2 = min(h, int(cy + bh / 2.0))
-    patch = frame[y1:y2, x1:x2]
-    if patch.size == 0 or patch.shape[0] < 2 or patch.shape[1] < 4:
-        return False
-    hsv = cv2.cvtColor(patch, cv2.COLOR_BGR2HSV)
-    # Красный спектр в MLBB (два диапазона тона H: 0..12 и 168..180)
-    mask1 = cv2.inRange(hsv, (0, 75, 75), (12, 255, 255))
-    mask2 = cv2.inRange(hsv, (168, 75, 75), (180, 255, 255))
-    red_pixels = np.count_nonzero(mask1 | mask2)
-    total_pixels = patch.shape[0] * patch.shape[1]
-    red_ratio = red_pixels / float(total_pixels)
-
-    # Зеленый спектр (союзники и тимейты)
-    green_mask = cv2.inRange(hsv, (35, 70, 70), (85, 255, 255))
-    green_pixels = np.count_nonzero(green_mask)
-    green_ratio = green_pixels / float(total_pixels)
-
-    # Если красных пикселей < 10% или зеленых больше, чем красных -> это СОЮЗНИК!
-    if red_ratio < 0.10 or green_ratio > red_ratio:
-        return False
-    return True
+    return _hp_detector.is_real_enemy_hp_bar(frame, xywh)
 
 
 def is_real_enemy_minion(frame: np.ndarray, xywh: list, is_near_base: bool) -> bool:
-    """
-    Фильтр союзных миньонов:
-    На базе или возле базы все миньоны - наши союзные!
-    Также отсекает миньонов с явной зеленой полоской над головой.
-    """
-    if is_near_base:
-        return False
-    cx, cy, bw, bh = xywh
-    h, w = frame.shape[:2]
-    # Полоска здоровья миньона находится в верхней трети бокса
-    y1 = max(0, int(cy - bh / 2.0))
-    y2 = min(h, int(cy - bh / 6.0))
-    x1 = max(0, int(cx - bw / 2.0))
-    x2 = min(w, int(cx + bw / 2.0))
-    patch = frame[y1:y2, x1:x2]
-    if patch.size == 0:
-        return False
-    hsv = cv2.cvtColor(patch, cv2.COLOR_BGR2HSV)
-    green_mask = cv2.inRange(hsv, (35, 70, 70), (85, 255, 255))
-    green_ratio = np.count_nonzero(green_mask) / float(patch.shape[0] * patch.shape[1])
-    if green_ratio > 0.15:
-        return False
-    return True
+    return _hp_detector.is_real_enemy_minion(frame, xywh, is_near_base)
 
 
 def get_claude_hp_ratio(frame: np.ndarray, self_target: tuple) -> float:
-    """
-    Оценивает процент оставшегося здоровья Клода (0.0 .. 1.0).
-    Анализирует зеленую полоску здоровья над моделью персонажа.
-    """
-    if not self_target:
-        return 1.0
-    sx, sy = int(self_target[0]), int(self_target[1])
-    h, w = frame.shape[:2]
-    y1, y2 = max(0, sy - 32), min(h, sy + 2)
-    x1, x2 = max(0, sx - 45), min(w, sx + 45)
-    patch = frame[y1:y2, x1:x2]
-    if patch.size == 0:
-        return 1.0
-    hsv = cv2.cvtColor(patch, cv2.COLOR_BGR2HSV)
-    green_mask = cv2.inRange(hsv, (35, 75, 75), (85, 255, 255))
-    green_pixels = np.count_nonzero(green_mask)
-    return float(np.clip(green_pixels / 120.0, 0.1, 1.0))
+    return _hp_detector.detect_player_hp(frame, self_target).value
 
 
 # ============================================================================
