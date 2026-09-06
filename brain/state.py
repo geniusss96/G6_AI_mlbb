@@ -46,6 +46,8 @@ class TacticalState:
 
     enemy_near_turret: bool
     is_near_base: bool
+    nearest_enemy_id: Optional[int] = None
+    nearest_minion_id: Optional[int] = None
 
 
 class TacticalStateBuilder:
@@ -107,6 +109,7 @@ class TacticalStateBuilder:
 
         nearest_enemy_dist: Optional[float] = None
         nearest_enemy_pos: Optional[Vector2] = None
+        nearest_enemy_id: Optional[int] = None
 
         if world_state.enemies:
             closest_enemy = min(
@@ -115,6 +118,7 @@ class TacticalStateBuilder:
             )
             nearest_enemy_dist = player_pos.distance_to(closest_enemy.position)
             nearest_enemy_pos = closest_enemy.position
+            nearest_enemy_id = getattr(closest_enemy, "track_id", None)
 
         # 4. Enemy minion feature extraction
         enemy_minions = [m for m in world_state.minions if m.is_enemy]
@@ -122,6 +126,7 @@ class TacticalStateBuilder:
 
         nearest_minion_dist: Optional[float] = None
         nearest_minion_pos: Optional[Vector2] = None
+        nearest_minion_id: Optional[int] = None
 
         if enemy_minions:
             closest_minion = min(
@@ -130,6 +135,7 @@ class TacticalStateBuilder:
             )
             nearest_minion_dist = player_pos.distance_to(closest_minion.position)
             nearest_minion_pos = closest_minion.position
+            nearest_minion_id = getattr(closest_minion, "track_id", None)
 
         # 5. Turret proximity
         turret_near = any(
@@ -155,4 +161,6 @@ class TacticalStateBuilder:
             nearest_minion_position=nearest_minion_pos,
             enemy_near_turret=turret_near,
             is_near_base=bool(world_state.is_near_base),
+            nearest_enemy_id=nearest_enemy_id,
+            nearest_minion_id=nearest_minion_id,
         )
