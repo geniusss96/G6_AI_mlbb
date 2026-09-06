@@ -383,31 +383,40 @@ This is the validated 4-step combo. There is **no fifth S2-back step**. The comb
 
 Hardware: Samsung Galaxy S22 Ultra SM-S908N (Android 16), Windows PC, NVIDIA P106-100 (sm_61), PyTorch 2.7.1+cu118.
 
-### Stage 24 -- CPU inference (YOLO was running on CPU)
+### Stage 27 -- Apples-to-Apples CPU vs GPU (30 warm ticks each, same pipeline, same device)
+
+| Metric | CPU | GPU (cuda:0) | Delta | Winner |
+|---|---|---|---|---|
+| YOLO inference avg | 27.8 ms | 23.1 ms | -4.7 ms | GPU |
+| YOLO inference p95 | 28.4 ms | 23.4 ms | -5.0 ms | GPU |
+| **Total tick avg** | **43.1 ms** | **38.3 ms** | **-4.8 ms (-11.1%)** | **GPU** |
+| Total tick p50 | 43.1 ms | 38.0 ms | -4.8 ms | GPU |
+| Total tick p95 | 43.9 ms | 38.9 ms | -5.0 ms | GPU |
+| Effective FPS | 23.2 FPS | 26.1 FPS | +2.9 FPS | GPU |
+| Capture avg | 8.7 ms | 8.6 ms | -0.1 ms | Equivalent |
+| CUDA sync overhead | -- | 0.25 ms | -- | -- |
+
+**Production default: cuda:0** (confirmed by end-to-end measurement, not isolated YOLO speed).
+
+GPU overhead breakdown:
+- YOLO-only delta: -4.71 ms (GPU faster)
+- Non-YOLO overhead (transfer + sync + postprocess): -0.10 ms (negligible)
+- Total tick advantage: -4.81 ms
+
+**Key finding:** On this hardware (Pascal sm_61), the 11.1% total tick improvement is real and consistent (p95 difference matches avg difference). GPU scheduling jitter is minimal (p95-avg spread: CPU=0.8ms, GPU=0.9ms -- equivalent stability).
+
+> Note: these are observations on the tested hardware. Isolated YOLO speed does not necessarily equal lower total tick latency. On this system, GPU transfer overhead (0.25ms sync) is negligible relative to YOLO speedup (~4.7ms). This may differ on other GPUs or with different workloads.
+
+### Stage 24 -- CPU-only baseline (historical reference)
 
 | Metric | Value |
 |---|---|
 | Warm total tick | ~42.3 ms (p95: 47.0 ms) |
-| Warm YOLO inference | ~28.8 ms (p95: 33.3 ms) |
-| Capture (mss) | ~9.0 ms |
-| Effective FPS (no sleep) | ~23.6 FPS |
+| Warm YOLO inference | ~28.8 ms |
+| Effective FPS | ~23.6 FPS |
 | Cold YOLO (first inference) | ~1053 ms (JIT warmup, one-time) |
 
-### Stage 26 -- GPU inference (cuda:0, NVIDIA P106-100 sm_61)
-
-| Metric | Value |
-|---|---|
-| Warm YOLO inference (5-call avg) | ~24.9 ms |
-| Cold YOLO (first inference, JIT) | ~824 ms (one-time) |
-| Warm total tick (30-tick bench) | ~46.5 ms (p95: 58.1 ms) |
-| Effective FPS (no sleep) | ~21.5 FPS |
-| GPU speedup on YOLO only | ~1.2x vs CPU baseline |
-
-> GPU total tick is slightly higher than CPU due to memory transfer overhead on Pascal (no tensor cores). Net system throughput gain is within measurement noise for this GPU generation.
-
-> All values are observations on the tested hardware, not universal guarantees. ADB dispatch latency is not full device round-trip time.
-
-Primary bottleneck: **YOLO inference (69% of tick)** -- hardware-bound. Secondary: **screen capture (20%)**.
+Primary bottleneck: **YOLO inference (64-69% of tick)** -- hardware-bound.
 
 ## Q. Hotkeys (V1 Legacy Runtime Only)
 
