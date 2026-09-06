@@ -18,6 +18,8 @@ import copy
 import random
 from typing import Any, Dict, List, Optional, Tuple
 
+from brain.transition import Transition
+
 
 class QLearningCore:
     """Isolated Q-Learning core managing state-action tables and updates."""
@@ -208,6 +210,85 @@ class QLearningCore:
         old_q = table[state_key].get(action, 0.0)
         new_q = round(old_q + effective_alpha * (reward - old_q), 2)
         table[state_key][action] = new_q
+        return new_q
+
+    def infer_domain(self, state_key: str) -> str:
+        """Infers the Q-table domain ('combat', 'farm', 'roam') from state_key."""
+        if state_key in self.combat_q_table:
+            return "combat"
+        if state_key in self.farm_q_table:
+            return "farm"
+        if state_key in self.roam_q_table:
+            return "roam"
+        if state_key.startswith("SCOUT_"):
+            return "roam"
+        if state_key.startswith("CREEP_"):
+            return "farm"
+        return "combat"
+
+    def update_td(
+        self,
+        transition: Transition,
+        table_name: Optional[str] = None,
+        alpha: Optional[float] = None,
+        next_actions: Optional[List[str]] = None,
+    ) -> float:
+        """Executes full 1-step Temporal-Difference Q-learning update (V2 algorithm):
+
+            Target:
+                If done: target = reward
+                Else:    target = reward + gamma * max_a' Q(next_state, a')
+
+            Update:
+                Q(s, a) <- round(Q(s, a) + alpha * [target - Q(s, a)], 2)
+
+        Args:
+            transition: The (s, a, r, s', done) transition tuple.
+            table_name: Optional Q-table domain ('combat', 'farm', 'roam'). If None, inferred.
+            alpha: Optional custom learning rate. Defaults to self.alpha.
+            next_actions: Optional candidate actions list for greedy target evaluation.
+
+        Returns:
+            float: New updated Q(s, a) value.
+        """
+        if not isinstance(transition, Transition):
+            raise TypeError(
+                f"transition must be a Transition instance, got: {type(transition).__name__}"
+            )
+
+        if not transition.done and transition.next_state_key is None:
+            raise ValueError("next_state_key cannot be None for non-terminal transition")
+
+        domain = (table_name or self.infer_domain(transition.state_key)).lower().strip()
+        effective_alpha = self.alpha if alpha is None else float(alpha)
+
+        # 1. Retrieve current Q(s, a)
+        old_q = self.get_q(domain, transition.state_key, transition.action, default=0.0)
+
+        # 2. Compute Bellman Target
+        if transition.done:
+            target = float(transition.reward)
+        else:
+            next_actions_dict = self.get_state_actions(domain, str(transition.next_state_key))
+            if next_actions_dict:
+                if next_actions is not None:
+                    max_next_q = max(
+                        (next_actions_dict.get(a, 0.0) for a in next_actions),
+                        default=0.0,
+                    )
+                else:
+                    max_next_q = max(next_actions_dict.values())
+            else:
+                max_next_q = 0.0
+
+            target = float(transition.reward) + self.gamma * max_next_q
+
+        # 3. Compute Temporal Difference Error & Apply EMA step
+        td_error = target - old_q
+        new_q = round(old_q + effective_alpha * td_error, 2)
+
+        # 4. Explicitly set new Q-value
+        self.set_q(domain, transition.state_key, transition.action, new_q)
         return new_q
 
     def reset_state(self, table_name: str, state_key: str) -> bool:
