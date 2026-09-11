@@ -249,6 +249,34 @@ class V2Runtime:
             else:
                 execution_result = ExecutionResult(success=True, action=action)
 
+            # Feed successful combat/farm intents back into the event detector.
+            # This is deliberately done after execution so a failed physical action
+            # cannot manufacture kill evidence. The detector then uses the record on
+            # subsequent ticks to confirm engagement duration/attack freshness.
+            if (
+                execution_result.success
+                and self.event_detector
+                and hasattr(self.event_detector, "record_attack_action")
+            ):
+                try:
+                    combat_attack_types = {ActionType.ATTACK, ActionType.CAST_S2, ActionType.CAST_ULT}
+                    farm_attack_types = {ActionType.FARM, ActionType.CAST_S1}
+
+                    if action.type in combat_attack_types and tactical_state.nearest_enemy_position is not None:
+                        self.event_detector.record_attack_action(
+                            tactical_state.nearest_enemy_position,
+                            timestamp=now,
+                            is_hero=True,
+                        )
+                    elif action.type in farm_attack_types and tactical_state.nearest_minion_position is not None:
+                        self.event_detector.record_attack_action(
+                            tactical_state.nearest_minion_position,
+                            timestamp=now,
+                            is_hero=False,
+                        )
+                except Exception:
+                    logger.debug("Failed to record attack intent for event detector", exc_info=True)
+
             # Record state for the next tick's transition
             self._prev_tactical_state = tactical_state
             self._prev_action = action

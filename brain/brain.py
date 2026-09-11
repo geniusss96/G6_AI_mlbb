@@ -78,47 +78,63 @@ class ClaudeBrainV2:
         tactical_policy: Optional[Any] = None,
         random_generator: Optional[Any] = None,
     ) -> None:
-        self.q_learning: QLearningCore = q_learning if q_learning is not None else QLearningCore()
-        self.rewards: RewardCalculator = rewards if rewards is not None else RewardCalculator()
-        self.memory: BrainMemory = memory if memory is not None else BrainMemory()
+        self.q_learning: QLearningCore = (
+            q_learning if q_learning is not None else QLearningCore()
+        )
+        self.rewards: RewardCalculator = (
+            rewards if rewards is not None else RewardCalculator()
+        )
+        self.memory: BrainMemory = (
+            memory if memory is not None else BrainMemory()
+        )
         self.tactical_policy: Optional[Any] = tactical_policy
-        self._rng: Any = random_generator if random_generator is not None else random
+        self._rng: Any = (
+            random_generator if random_generator is not None else random
+        )
 
         # Runtime tactical history
         self.last_enemy_seen_time: float = 0.0
         self.last_decision: Optional[str] = None
+
         self.last_combat_state: Optional[str] = None
         self.last_combat_action: Optional[str] = None
+
         self.last_farm_state: Optional[str] = None
         self.last_farm_action: Optional[str] = None
+
         self.last_roam_state: Optional[str] = None
         self.last_roam_action: Optional[str] = None
+
         self.total_decisions: int = 0
 
     def decide(self, tactical_state: TacticalState) -> Action:
-        """Evaluates tactical state and outputs the next abstract Action.
+        """Evaluate tactical state and output the next abstract Action."""
 
-        Args:
-            tactical_state: Distilled immutable features from the world layer.
-
-        Returns:
-            Action: High-level tactical action (MOVE, ATTACK, KITE, etc.).
-        """
         if not isinstance(tactical_state, TacticalState):
-            raise TypeError(f"decide expects TacticalState, got: {type(tactical_state)}")
+            raise TypeError(
+                f"decide expects TacticalState, got: {type(tactical_state)}"
+            )
 
-        # If player is marked dead / invisible, issue IDLE
+        # ------------------------------------------------------------------
+        # Player dead -> idle
+        # ------------------------------------------------------------------
         if tactical_state.is_player_dead:
             return Action(type=ActionType.IDLE)
 
-        # ----------------------------------------------------------------------
-        # Branch 1: Enemy Hero in sight -> Combat Duel
-        # ----------------------------------------------------------------------
-        if tactical_state.enemy_visible and tactical_state.nearest_enemy_distance is not None:
+        # ------------------------------------------------------------------
+        # Branch 1: Enemy Hero in sight -> Combat
+        # ------------------------------------------------------------------
+        if (
+            tactical_state.enemy_visible
+            and tactical_state.nearest_enemy_distance is not None
+        ):
             self.last_enemy_seen_time = tactical_state.timestamp
+
             decision = self._decide_combat(tactical_state)
+
             self.last_decision = decision
             self.total_decisions += 1
+
             if self.memory:
                 self.memory.log_action(
                     category="COMBAT",
@@ -126,18 +142,24 @@ class ClaudeBrainV2:
                     action=decision,
                     timestamp=tactical_state.timestamp,
                 )
-            return self.map_decision_to_action(decision, tactical_state)
 
-        # ----------------------------------------------------------------------
+            return self.map_decision_to_action(
+                decision,
+                tactical_state,
+            )
+
+        # ------------------------------------------------------------------
         # Branch 2: Minions/Creeps in sight -> Farm
-        # ----------------------------------------------------------------------
+        # ------------------------------------------------------------------
         if (
             tactical_state.minion_count > 0
             and tactical_state.nearest_minion_distance is not None
         ):
             decision = self._decide_farm(tactical_state)
+
             self.last_decision = decision
             self.total_decisions += 1
+
             if self.memory:
                 self.memory.log_action(
                     category="FARM",
@@ -145,14 +167,20 @@ class ClaudeBrainV2:
                     action=decision,
                     timestamp=tactical_state.timestamp,
                 )
-            return self.map_decision_to_action(decision, tactical_state)
 
-        # ----------------------------------------------------------------------
-        # Branch 3: Free Lane -> Exploration & Roaming
-        # ----------------------------------------------------------------------
+            return self.map_decision_to_action(
+                decision,
+                tactical_state,
+            )
+
+        # ------------------------------------------------------------------
+        # Branch 3: Free lane -> Roam
+        # ------------------------------------------------------------------
         decision = self._decide_roam(tactical_state)
+
         self.last_decision = decision
         self.total_decisions += 1
+
         if self.memory:
             self.memory.log_action(
                 category="ROAM",
@@ -160,11 +188,15 @@ class ClaudeBrainV2:
                 action=decision,
                 timestamp=tactical_state.timestamp,
             )
-        return self.map_decision_to_action(decision, tactical_state)
 
-    # --------------------------------------------------------------------------
-    # Tactical Decision Logic (1:1 V1 Semantics)
-    # --------------------------------------------------------------------------
+        return self.map_decision_to_action(
+            decision,
+            tactical_state,
+        )
+
+    # ----------------------------------------------------------------------
+    # Q-learning selection
+    # ----------------------------------------------------------------------
     def _choose_epsilon_greedy(
         self,
         domain: str,
@@ -172,26 +204,50 @@ class ClaudeBrainV2:
         actions: List[str],
         epsilon: float,
     ) -> str:
-        """Executes Epsilon-Greedy choice using injected QLearningCore."""
+        """Execute epsilon-greedy choice through QLearningCore."""
+
+        if not actions:
+            raise ValueError(
+                f"No actions available for domain={domain}, state={state_key}"
+            )
+
         self.q_learning.ensure_state(
             table_name=domain,
             state_key=state_key,
             defaults={act: 0.0 for act in actions},
         )
 
+        # Exploration
         if self._rng.random() < epsilon:
             return self._rng.choice(actions)
 
+        # Exploitation
         chosen, _ = self.q_learning.get_best_action(
             table_name=domain,
             state_key=state_key,
             candidate_actions=actions,
             rng=self._rng,
         )
+
         return chosen
 
+    # ----------------------------------------------------------------------
+    # Combat decision
+    # ----------------------------------------------------------------------
     def _decide_combat(self, ts: TacticalState) -> str:
-        # 1. Hard safety overrides
+        """Choose combat action using safety rules + Q-learning.
+
+        Important:
+        - Hard safety rules always win.
+        - DIVE_ALL_IN is unavailable when combo is not ready.
+        - Memory is only a weak hint.
+        - Q-learning remains the primary decision source.
+        """
+
+        # ==============================================================
+        # 1. HARD SAFETY OVERRIDES
+        # ==============================================================
+
         if ts.enemy_near_turret:
             self.last_combat_state = "TURRET_DANGER"
             self.last_combat_action = "TURRET_RETREAT"
@@ -202,8 +258,16 @@ class ClaudeBrainV2:
             self.last_combat_action = "TACTICAL_RETREAT"
             return "TACTICAL_RETREAT"
 
-        # 2. State discretization
-        dist = ts.nearest_enemy_distance if ts.nearest_enemy_distance is not None else 300.0
+        # ==============================================================
+        # 2. DISCRETIZE CURRENT COMBAT STATE
+        # ==============================================================
+
+        dist = (
+            ts.nearest_enemy_distance
+            if ts.nearest_enemy_distance is not None
+            else 300.0
+        )
+
         if dist < 260.0:
             dist_cat = "DANGER_CLOSE"
         elif dist <= 430.0:
@@ -211,28 +275,91 @@ class ClaudeBrainV2:
         else:
             dist_cat = "CHASE_FAR"
 
-        hp_cat = "HIGH" if ts.player_hp_ratio >= 0.65 else "MID"
-        state = f"{dist_cat}_{hp_cat}_COMBO_{ts.can_combo}"
+        if ts.player_hp_ratio >= 0.65:
+            hp_cat = "HIGH"
+        else:
+            hp_cat = "MID"
+
+        state = (
+            f"{dist_cat}_"
+            f"{hp_cat}_"
+            f"COMBO_{ts.can_combo}"
+        )
+
         self.last_combat_state = state
 
-        # 3. Recall from highlight memory bank (70% probability if available)
-        recalled = self.memory.recall_best_tactic(self.DUEL_ACTIONS) if self.memory else None
-        if recalled and self._rng.random() < 0.70:
-            self.last_combat_action = recalled
-            return recalled
+        # ==============================================================
+        # 3. BUILD ONLY LEGAL ACTIONS
+        # ==============================================================
 
-        # 4. Epsilon-Greedy selection from QLearningCore (combat epsilon = 0.08)
+        actions = list(self.DUEL_ACTIONS)
+
+        # Never allow all-in when combo is not ready.
+        if not ts.can_combo and "DIVE_ALL_IN" in actions:
+            actions.remove("DIVE_ALL_IN")
+
+        # At reduced HP, also block all-in.
+        if ts.player_hp_ratio < 0.45 and "DIVE_ALL_IN" in actions:
+            actions.remove("DIVE_ALL_IN")
+
+        # Very close + low HP -> prefer survival actions.
+        if dist < 180.0 and ts.player_hp_ratio < 0.55:
+            preferred = [
+                action
+                for action in (
+                    "KITE_AND_POKE",
+                    "SWEET_SPOT_BURST",
+                )
+                if action in actions
+            ]
+
+            if preferred:
+                actions = preferred
+
+        if not actions:
+            actions = ["KITE_AND_POKE"]
+
+        # ==============================================================
+        # 4. Q-LEARNING IS THE PRIMARY DECISION MAKER
+        # ==============================================================
+
         chosen_action = self._choose_epsilon_greedy(
             domain="combat",
             state_key=state,
-            actions=self.DUEL_ACTIONS,
+            actions=actions,
             epsilon=0.08,
         )
+
+        # ==============================================================
+        # 5. MEMORY = WEAK OPTIONAL HINT
+        # ==============================================================
+
+        recalled = (
+            self.memory.recall_best_tactic(actions)
+            if self.memory
+            else None
+        )
+
+        # Memory may influence only 15% of valid decisions.
+        if (
+            recalled in actions
+            and self._rng.random() < 0.15
+        ):
+            chosen_action = recalled
+
         self.last_combat_action = chosen_action
         return chosen_action
 
+    # ----------------------------------------------------------------------
+    # Farm decision
+    # ----------------------------------------------------------------------
     def _decide_farm(self, ts: TacticalState) -> str:
-        dist = ts.nearest_minion_distance if ts.nearest_minion_distance is not None else 300.0
+        dist = (
+            ts.nearest_minion_distance
+            if ts.nearest_minion_distance is not None
+            else 300.0
+        )
+
         if dist > 420.0:
             dist_cat = "CREEP_FAR"
         elif dist < 260.0:
@@ -240,22 +367,39 @@ class ClaudeBrainV2:
         else:
             dist_cat = "CREEP_SWEET_SPOT"
 
-        hp_cat = "SAFE" if ts.player_hp_ratio >= 0.50 else "LOW"
-        state = f"{dist_cat}_S1_{ts.s1_ready}_{hp_cat}"
+        hp_cat = (
+            "SAFE"
+            if ts.player_hp_ratio >= 0.50
+            else "LOW"
+        )
+
+        state = (
+            f"{dist_cat}_"
+            f"S1_{ts.s1_ready}_"
+            f"{hp_cat}"
+        )
+
         self.last_farm_state = state
 
-        # Epsilon-Greedy selection from QLearningCore (farm epsilon = 0.10)
         chosen_action = self._choose_epsilon_greedy(
             domain="farm",
             state_key=state,
-            actions=self.FARM_ACTIONS,
+            actions=list(self.FARM_ACTIONS),
             epsilon=0.10,
         )
+
         self.last_farm_action = chosen_action
         return chosen_action
 
+    # ----------------------------------------------------------------------
+    # Roam decision
+    # ----------------------------------------------------------------------
     def _decide_roam(self, ts: TacticalState) -> str:
-        time_since_enemy = max(0.0, ts.timestamp - self.last_enemy_seen_time)
+        time_since_enemy = max(
+            0.0,
+            ts.timestamp - self.last_enemy_seen_time,
+        )
+
         if time_since_enemy < 5.0:
             state = "SCOUT_HOT_ZONE"
         elif time_since_enemy < 15.0:
@@ -264,69 +408,152 @@ class ClaudeBrainV2:
             state = "SCOUT_DEEP_PATROL"
 
         self.last_roam_state = state
+
         actions = list(self.ROAM_ACTIONS.keys())
 
-        # Epsilon-Greedy selection from QLearningCore (roam epsilon = 0.20)
         chosen_action = self._choose_epsilon_greedy(
             domain="roam",
             state_key=state,
             actions=actions,
             epsilon=0.20,
         )
+
         self.last_roam_action = chosen_action
         return chosen_action
 
-    # --------------------------------------------------------------------------
-    # Mapping V1 Decision String -> Typed Action
-    # --------------------------------------------------------------------------
-    def map_decision_to_action(self, decision: str, ts: TacticalState) -> Action:
-        """Translates string decision into typed Action with target coordinates."""
-        action_type = self.DECISION_TO_ACTION_TYPE.get(decision, ActionType.IDLE)
+    # ----------------------------------------------------------------------
+    # Mapping decision -> typed Action
+    # ----------------------------------------------------------------------
+    def map_decision_to_action(
+        self,
+        decision: str,
+        ts: TacticalState,
+    ) -> Action:
+        """Translate string decision into typed Action."""
+
+        action_type = self.DECISION_TO_ACTION_TYPE.get(
+            decision,
+            ActionType.IDLE,
+        )
+
         player_pos = ts.player_position
 
-        # --- Combat Decisions ---
-        if decision in ("TURRET_RETREAT", "TACTICAL_RETREAT"):
-            safe_point = Vector2(player_pos.x - 180.0, player_pos.y + 90.0)
-            return Action(type=action_type, direction=safe_point, target_id=ts.nearest_enemy_id)
+        # ==============================================================
+        # Combat
+        # ==============================================================
+
+        if decision in (
+            "TURRET_RETREAT",
+            "TACTICAL_RETREAT",
+        ):
+            safe_point = Vector2(
+                player_pos.x - 180.0,
+                player_pos.y + 90.0,
+            )
+
+            return Action(
+                type=action_type,
+                direction=safe_point,
+                target_id=ts.nearest_enemy_id,
+            )
 
         if decision == "KITE_AND_POKE":
-            return Action(type=action_type, direction=ts.nearest_enemy_position, target_id=ts.nearest_enemy_id)
+            return Action(
+                type=action_type,
+                direction=ts.nearest_enemy_position,
+                target_id=ts.nearest_enemy_id,
+            )
 
         if decision == "SWEET_SPOT_BURST":
-            enemy_pos = ts.nearest_enemy_position or player_pos
+            enemy_pos = (
+                ts.nearest_enemy_position
+                or player_pos
+            )
+
             dx = enemy_pos.x - player_pos.x
             dy = enemy_pos.y - player_pos.y
-            strafe_pos = Vector2(player_pos.x - dy * 0.45, player_pos.y + dx * 0.45)
-            return Action(type=action_type, direction=strafe_pos, target_id=ts.nearest_enemy_id)
+
+            strafe_pos = Vector2(
+                player_pos.x - dy * 0.45,
+                player_pos.y + dx * 0.45,
+            )
+
+            return Action(
+                type=action_type,
+                direction=strafe_pos,
+                target_id=ts.nearest_enemy_id,
+            )
 
         if decision == "DIVE_ALL_IN":
-            return Action(type=action_type, direction=ts.nearest_enemy_position, target_id=ts.nearest_enemy_id)
+            return Action(
+                type=action_type,
+                direction=ts.nearest_enemy_position,
+                target_id=ts.nearest_enemy_id,
+            )
 
-        # --- Farm Decisions ---
-        if decision in ("FARM_APPROACH", "FARM_KITE_BACK"):
-            return Action(type=action_type, direction=ts.nearest_minion_position, target_id=ts.nearest_minion_id)
+        # ==============================================================
+        # Farming
+        # ==============================================================
+
+        if decision in (
+            "FARM_APPROACH",
+            "FARM_KITE_BACK",
+        ):
+            return Action(
+                type=action_type,
+                direction=ts.nearest_minion_position,
+                target_id=ts.nearest_minion_id,
+            )
 
         if decision == "FARM_S1_AOE":
-            return Action(type=action_type, target_id=ts.nearest_minion_id)
+            return Action(
+                type=action_type,
+                target_id=ts.nearest_minion_id,
+            )
 
         if decision == "FARM_SWEET_SPOT":
-            minion_pos = ts.nearest_minion_position or player_pos
+            minion_pos = (
+                ts.nearest_minion_position
+                or player_pos
+            )
+
             dx = minion_pos.x - player_pos.x
             dy = minion_pos.y - player_pos.y
-            strafe_pos = Vector2(player_pos.x - dy * 0.40, player_pos.y + dx * 0.40)
-            return Action(type=action_type, direction=strafe_pos, target_id=ts.nearest_minion_id)
 
-        # --- Roam Decisions ---
+            strafe_pos = Vector2(
+                player_pos.x - dy * 0.40,
+                player_pos.y + dx * 0.40,
+            )
+
+            return Action(
+                type=action_type,
+                direction=strafe_pos,
+                target_id=ts.nearest_minion_id,
+            )
+
+        # ==============================================================
+        # Roaming
+        # ==============================================================
+
         if decision in self.ROAM_OFFSETS:
             dx, dy = self.ROAM_OFFSETS[decision]
-            target_pt = Vector2(player_pos.x + dx, player_pos.y + dy)
-            return Action(type=action_type, direction=target_pt)
 
+            target_pt = Vector2(
+                player_pos.x + dx,
+                player_pos.y + dy,
+            )
+
+            return Action(
+                type=action_type,
+                direction=target_pt,
+            )
+
+        # Unknown decision -> safe idle
         return Action(type=ActionType.IDLE)
 
-    # --------------------------------------------------------------------------
-    # Learning Integration
-    # --------------------------------------------------------------------------
+    # ----------------------------------------------------------------------
+    # Learning integration
+    # ----------------------------------------------------------------------
     def apply_reward(
         self,
         domain: str,
@@ -334,9 +561,13 @@ class ClaudeBrainV2:
         action: str,
         reward: Reward,
     ) -> float:
-        """Applies a reward to the Q-table via QLearningCore."""
+        """Apply reward to QLearningCore."""
+
         if not isinstance(reward, Reward):
-            raise TypeError(f"apply_reward expects Reward, got: {type(reward)}")
+            raise TypeError(
+                f"apply_reward expects Reward, got: {type(reward)}"
+            )
+
         return self.q_learning.update_q(
             table_name=domain,
             state_key=state,

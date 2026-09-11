@@ -49,6 +49,7 @@ class TacticalState:
     nearest_enemy_id: Optional[int] = None
     nearest_minion_id: Optional[int] = None
     is_player_visible: bool = True
+    is_player_hp_visible: bool = True
 
 
 class TacticalStateBuilder:
@@ -80,24 +81,37 @@ class TacticalStateBuilder:
             TacticalState: Immutable feature vector for Tactical Brain.
         """
         if not isinstance(world_state, WorldState):
-            raise TypeError(f"TacticalStateBuilder expects WorldState, got: {type(world_state)}")
+            raise TypeError(
+                f"TacticalStateBuilder expects WorldState, got: {type(world_state)}"
+            )
 
         # 1. Player state extraction
         if world_state.player:
             player_pos = world_state.player.position
             is_visible = bool(world_state.player.is_visible)
-            hp_ratio = float(world_state.player.hp.value) if world_state.player.hp else 1.0
-            # LOST != DEAD: Temporary loss of vision/missing frames must never automatically mean player death.
-            # Confirmed player death requires explicit death flag or zero HP.
+
+            hp_observation = world_state.player.hp
+            hp_visible = bool(hp_observation and hp_observation.visible)
+
+            # IMPORTANT:
+            # Missing/unavailable HP must never be interpreted as real low HP.
+            if hp_visible:
+                hp_ratio = float(hp_observation.value)
+            else:
+                hp_ratio = 1.0
+
+            # LOST != DEAD.
+            # Death requires an explicit death flag or an actually observed zero HP.
             is_dead = getattr(world_state.player, "is_dead", False) or (
-                world_state.player.hp is not None
-                and world_state.player.hp.value <= 0.0
+                hp_visible
+                and hp_observation.value <= 0.0
             )
         else:
             player_pos = self.default_player_pos
             is_visible = False
             is_dead = False
             hp_ratio = 1.0
+            hp_visible = False
 
         # 2. Skill state extraction
         if world_state.skills:
@@ -147,7 +161,8 @@ class TacticalStateBuilder:
 
         # 5. Turret proximity
         turret_near = any(
-            t.is_enemy and player_pos.distance_to(t.position) < self.turret_danger_dist
+            t.is_enemy
+            and player_pos.distance_to(t.position) < self.turret_danger_dist
             for t in world_state.turrets
         )
 
@@ -172,4 +187,5 @@ class TacticalStateBuilder:
             nearest_enemy_id=nearest_enemy_id,
             nearest_minion_id=nearest_minion_id,
             is_player_visible=is_visible,
+            is_player_hp_visible=hp_visible,
         )

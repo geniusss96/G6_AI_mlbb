@@ -235,11 +235,44 @@ class WorldEventDetector:
     PLAYER_LOW_HP_THRESHOLD = 0.28
     RECENT_COMBAT_TIMEOUT_SEC = 4.0
 
+    # Semantic target lifecycle debounce. A detector may replace a track ID
+    # after a short occlusion; do not turn that ID churn into ENTERED/LOST
+    # event storms when the replacement is spatially and temporally consistent.
+    TARGET_REPLACEMENT_MAX_DISTANCE_PX = 90.0
+    TARGET_REPLACEMENT_MAX_GAP_SEC = 1.2
+
+    @staticmethod
+    def _is_enemy_hero_track(track: Track) -> bool:
+        """Return True only for tracks representing an enemy hero/hero HP target.
+
+        Current datasets use names such as ``hp_enemy`` / ``hero_enemy``.
+        Minions, buffs, turrets and other neutral objects must never become
+        TARGET_ENTERED rewards or participate in hero-kill disappearance logic.
+        """
+        name = (track.class_name or "").strip().lower().replace("-", "_")
+        if not name:
+            return False
+
+        # Explicit hero labels used by project datasets.
+        if name in {"hp_enemy", "hero_enemy", "enemy_hero", "enemyhero"}:
+            return True
+
+        # Generic hero labels: allow "enemy"/"hero", reject known non-hero classes.
+        blocked = (
+            "minion", "creep", "buff", "turret", "tower", "crab",
+            "lord", "turtle", "nexus", "base", "bush", "vazon",
+        )
+        if any(token in name for token in blocked):
+            return False
+
+        return "enemy" in name and ("hero" in name or name.startswith("hp_"))
+
     def __init__(self, watchdog_manager: Optional[WatchdogManager] = None):
         self.watchdog = watchdog_manager or WatchdogManager()
 
         # Observation tracking for TARGET_ENTERED / TARGET_LOST
         self._previous_track_ids: Set[int] = set()
+        self._previous_track_snapshot: dict[int, Tuple[str, Vector2, float]] = {}
 
         # Combat tracking state
         self._combat_start_time: Optional[float] = None
@@ -290,29 +323,95 @@ class WorldEventDetector:
         events: List[GameEvent] = []
 
         # 1. Track Observation Events: TARGET_ENTERED / TARGET_LOST
-        current_track_ids = {t.track_id for t in tracks if t.visible}
+        # Use tracker lifecycle, not the per-frame `visible` flag.
+        # WorldTracker intentionally keeps temporarily-lost tracks alive for
+        # `lost_timeout_sec` to absorb detector flicker. Emitting TARGET_LOST
+        # from `visible=False` would bypass that hysteresis and create rapid
+        # ENTERED/LOST oscillation on ordinary one-frame detection drops.
+        active_tracks = [t for t in tracks if t.state != TrackLifecycle.REMOVED]
+        current_track_ids = {t.track_id for t in active_tracks}
         new_ids = current_track_ids - self._previous_track_ids
         lost_ids = self._previous_track_ids - current_track_ids
 
-        for tid in new_ids:
-            events.append(GameEvent(
-                type=EventType.TARGET_ENTERED,
-                timestamp=timestamp,
-                entity_id=tid,
-                confidence=1.0,
-                evidence=("track_appeared",)
-            ))
+        # Pair a newly-created track with a just-lost track when the class and
+        # position are consistent. This handles track-ID churn after short
+        # detector/association instability without changing tracker hysteresis.
+        replacement_new_ids: Set[int] = set()
+        replacement_lost_ids: Set[int] = set()
+        used_lost: Set[int] = set()
+        for new_id in sorted(new_ids):
+            new_track = next(t for t in active_tracks if t.track_id == new_id)
+            best_old = None
+            best_distance = self.TARGET_REPLACEMENT_MAX_DISTANCE_PX
+            for old_id in sorted(lost_ids):
+                if old_id in used_lost:
+                    continue
+                snapshot = self._previous_track_snapshot.get(old_id)
+                if snapshot is None:
+                    continue
+                old_class, old_pos, old_seen = snapshot
+                if old_class != new_track.class_name:
+                    continue
+                gap = timestamp - old_seen
+                if gap < 0.0 or gap > self.TARGET_REPLACEMENT_MAX_GAP_SEC:
+                    continue
+                distance = old_pos.distance_to(new_track.position)
+                if distance < best_distance:
+                    best_distance = distance
+                    best_old = old_id
+            if best_old is not None:
+                replacement_new_ids.add(new_id)
+                replacement_lost_ids.add(best_old)
+                used_lost.add(best_old)
 
-        for tid in lost_ids:
-            events.append(GameEvent(
-                type=EventType.TARGET_LOST,
-                timestamp=timestamp,
-                entity_id=tid,
-                confidence=1.0,
-                evidence=("track_lost_from_frame",)
-            ))
+        # TARGET_* is a semantic hero-observation event, not a raw tracker event.
+        # Never emit it for minions/buffs/turrets/etc.; those detections can churn
+        # frequently and must not become +30 roam rewards or watchdog events.
+        active_by_id = {t.track_id: t for t in active_tracks}
+
+        for tid in sorted(new_ids - replacement_new_ids):
+            track = active_by_id.get(tid)
+            if track is not None and self._is_enemy_hero_track(track):
+                events.append(GameEvent(
+                    type=EventType.TARGET_ENTERED,
+                    timestamp=timestamp,
+                    entity_id=tid,
+                    confidence=min(1.0, max(0.0, float(track.confidence))),
+                    evidence=("enemy_hero_track_appeared", track.class_name),
+                ))
+
+        for tid in sorted(lost_ids - replacement_lost_ids):
+            snapshot = self._previous_track_snapshot.get(tid)
+            if snapshot is not None:
+                old_class, old_pos, old_seen = snapshot
+                # Build a tiny compatibility probe so the same semantic classifier
+                # is used for both ENTERED and LOST without changing Track models.
+                probe = Track(
+                    track_id=tid,
+                    position=old_pos,
+                    bbox=(old_pos.x, old_pos.y, old_pos.x, old_pos.y),
+                    confidence=1.0,
+                    class_name=old_class,
+                    class_id=-1,
+                    visible=False,
+                    first_seen=old_seen,
+                    last_seen=old_seen,
+                    state=TrackLifecycle.TEMPORARILY_LOST,
+                )
+                if self._is_enemy_hero_track(probe):
+                    events.append(GameEvent(
+                        type=EventType.TARGET_LOST,
+                        timestamp=timestamp,
+                        entity_id=tid,
+                        confidence=1.0,
+                        evidence=("enemy_hero_track_lost", old_class),
+                    ))
 
         self._previous_track_ids = current_track_ids
+        self._previous_track_snapshot = {
+            t.track_id: (t.class_name, t.position, t.last_seen)
+            for t in active_tracks
+        }
 
         # 2. Player Death Detection
         player = world_state.player
@@ -343,7 +442,7 @@ class WorldEventDetector:
                     ))
 
         # 3. Enemy Hero Kill Confirmation (V1 Anti-Corpse / Combat Duration Criteria)
-        visible_enemies = [t for t in tracks if t.visible and "enemy" in t.class_name]
+        visible_enemies = [t for t in tracks if t.visible and self._is_enemy_hero_track(t)]
 
         if visible_enemies:
             self._enemy_disappeared_since = None
@@ -421,6 +520,7 @@ class WorldEventDetector:
         """Clears detector state and history."""
         self.watchdog.reset()
         self._previous_track_ids.clear()
+        self._previous_track_snapshot.clear()
         self._combat_start_time = None
         self._last_combat_attack_time = None
         self._last_attacked_enemy_pos = None

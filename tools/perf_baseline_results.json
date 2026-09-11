@@ -1,45 +1,45 @@
 {
   "stage": "24",
   "device": "R3CT90BBMTX",
-  "yolo_device_config": "0",
+  "yolo_device_config": "cuda:0",
   "yolo_actual_device": "cpu",
   "cuda_available": true,
   "cuda_name": "NVIDIA P106-100",
   "warm_ticks": 30,
   "cold": {
-    "model_load_ms": 130.3,
-    "scrcpy_startup_ms": 1106.0,
-    "first_capture_ms": 40.44,
-    "first_inference_ms": 1053.53,
-    "second_inference_ms": 29.68,
-    "third_inference_ms": 25.56
+    "model_load_ms": 121.5,
+    "scrcpy_startup_ms": 1143.0,
+    "first_capture_ms": 36.74,
+    "first_inference_ms": 824.43,
+    "second_inference_ms": 24.91,
+    "third_inference_ms": 27.68
   },
   "warm": {
     "total_tick": {
-      "avg": 42.3,
-      "min": 36.7,
-      "max": 48.4,
-      "p50": 42.6,
-      "p95": 47.0
+      "avg": 46.5,
+      "min": 39.7,
+      "max": 72.4,
+      "p50": 45.0,
+      "p95": 58.1
     },
     "capture": {
-      "avg": 9.02
+      "avg": 9.36
     },
     "vision": {
-      "avg": 28.8,
-      "min": 23.3,
-      "max": 34.7,
-      "p50": 28.6,
-      "p95": 33.3
+      "avg": 32.2,
+      "min": 24.6,
+      "max": 50.4,
+      "p50": 31.9,
+      "p95": 41.4
     },
     "adb_raw_motionevent": {
-      "avg": 0.01
+      "avg": 0.02
     },
     "adb_raw_tap": {
       "avg": 0.01
     }
   },
-  "effective_fps_no_sleep": 23.6,
+  "effective_fps_no_sleep": 21.5,
   "primary_bottleneck": "Vision/YOLO",
   "secondary_bottleneck": "Capture",
   "optimizations_applied": "none",

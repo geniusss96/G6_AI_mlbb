@@ -1,5 +1,5 @@
 """
-tools/autonomous_session.py -- Stage 28: First Autonomous Gameplay Session.
+tools/autonomous_session.py -- Stage 29.1: Long Isolated Autonomous Gameplay Session.
 
 Runs a bounded autonomous MLBB gameplay session using the complete V2 pipeline:
     REAL SCREEN → VISION → WORLD STATE → TACTICAL BRAIN → ACTION →
@@ -9,9 +9,10 @@ Runs a bounded autonomous MLBB gameplay session using the complete V2 pipeline:
 Uses ALL existing V2 components. Creates NO new runtime, NO duplicated logic.
 
 Safety:
-    - Isolated QLearningCore (writes to data/q_brain_isolated_stage28.json)
+    - Isolated QLearningCore (writes only to data/q_brain_isolated_stage29.json)
     - Production q_brain.json and q_brain_baseline.json are NEVER modified
-    - Bounded session (max_runtime_seconds, max_ticks, max_consecutive_failures)
+    - Bounded session (10 minutes / 10,000 ticks max)
+    - Periodic isolated-Q checkpoints so a long run is not lost on interruption
     - Behavioral watchdogs (same-action, one-action collapse, event storm)
     - Clean emergency shutdown (joystick release, ADB close, Scrcpy terminate)
 
@@ -40,19 +41,22 @@ if WORKSPACE_ROOT not in sys.path:
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-MAX_RUNTIME_SECONDS = 60
-MAX_TICKS = 500
+MAX_RUNTIME_SECONDS = 600
+MAX_TICKS = 10000
 MAX_CONSECUTIVE_FAILURES = 5
 OBSERVE_TICKS = 8          # observe-only before enabling actions
 SAME_ACTION_WARN = 10      # consecutive identical actions → warning
 SAME_ACTION_STOP = 20      # consecutive identical actions → stop
 ONE_ACTION_DOMINANCE = 0.80 # >80% same type → flag
-EVENT_STORM_THRESHOLD = 10  # events in 1 second → stop
+EVENT_STORM_THRESHOLD = 10  # eventful ticks in 1 second → stop
 EVENT_STORM_WINDOW = 1.0
 
 Q_BRAIN_PATH = os.path.join(WORKSPACE_ROOT, "q_brain.json")
 BASELINE_PATH = os.path.join(WORKSPACE_ROOT, "data", "q_brain_baseline.json")
-ISOLATED_Q_PATH = os.path.join(WORKSPACE_ROOT, "data", "q_brain_isolated_stage28.json")
+ISOLATED_Q_PATH = os.path.join(WORKSPACE_ROOT, "data", "q_brain_isolated_stage29.json")
+SESSION_LOG_PATH = os.path.join(WORKSPACE_ROOT, "data", "stage29_session_log.jsonl")
+SUMMARY_PATH = os.path.join(WORKSPACE_ROOT, "data", "stage29_summary.json")
+CHECKPOINT_INTERVAL_SECONDS = 60.0
 
 SEP = "=" * 72
 
@@ -177,6 +181,35 @@ def count_q_states(ql) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Durable isolated-Q checkpoint
+# ---------------------------------------------------------------------------
+def save_isolated_q(ql, path: str, metadata: Dict[str, Any]) -> str:
+    """Atomically persist isolated Q-learning state and return its SHA-256."""
+    data = ql.export_tables()
+    data["metadata"] = metadata
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp_path = path + ".tmp"
+    with open(tmp_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp_path, path)
+    return sha256(path)
+
+
+def save_session_log(records: List[DecisionRecord], path: str) -> None:
+    """Atomically write the current compact session log."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp_path = path + ".tmp"
+    with open(tmp_path, "w", encoding="utf-8") as f:
+        for rec in records:
+            f.write(json.dumps(asdict(rec), ensure_ascii=False) + "\n")
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp_path, path)
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 def main():
@@ -186,10 +219,10 @@ def main():
         sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
     print(f"\n{SEP}")
-    print("  STAGE 28 -- FIRST AUTONOMOUS GAMEPLAY SESSION")
+    print("  STAGE 29.1 -- LONG ISOLATED AUTONOMOUS TRAINING SESSION")
     print(SEP)
 
-    stats = SessionStats()
+    stats = SessionStats(mode=RuntimeMode.AUTONOMOUS_ISOLATED.value)
     scrcpy_proc = None
     joystick = None
     adb = None
@@ -213,48 +246,56 @@ def main():
             YOLO_CUDA_STRICT,
         )
 
-        print(f"\n[1] Launching Scrcpy...")
+        print(f"\n[1] Preparing Scrcpy...")
         print(f"  YOLO_DEVICE = {YOLO_DEVICE}")
         print(f"  YOLO_CUDA_STRICT = {YOLO_CUDA_STRICT}")
 
-        subprocess.run(["taskkill", "/F", "/IM", "scrcpy.exe"], capture_output=True)
-        time.sleep(0.5)
-
-        scrcpy_proc = subprocess.Popen(
-            [SCRCPY_PATH, "-s", DEVICE_SERIAL, "--window-title", "scrcpy"],
-            cwd=SCRCPY_DIR,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-        )
-        t_wait = time.time()
-        texture_ready = False
-        while time.time() - t_wait < 10.0:
-            line = scrcpy_proc.stdout.readline()
-            if "Texture:" in line:
-                texture_ready = True
-                print(f"  [scrcpy] {line.strip()}")
-                break
-            if line.strip():
-                print(f"  [scrcpy] {line.strip()}")
-            if scrcpy_proc.poll() is not None:
-                break
-        if not texture_ready:
-            print("FATAL: Scrcpy texture not ready.")
-            stats.stop_reason = StopReason.RUNTIME_ERROR.value
-            return stats
-
+        # Reuse an already-running Scrcpy window so the autonomous session
+        # can coexist with a manually launched Scrcpy/Scrcpy session.
         from vision.capture import ScreenCapture
-        time.sleep(0.5)
         capture = ScreenCapture()
         hwnd = capture.find_scrcpy_window()
-        if not hwnd:
-            print("FATAL: Could not find Scrcpy window.")
-            stats.stop_reason = StopReason.RUNTIME_ERROR.value
-            return stats
-        print(f"  HWND={hwnd}")
+
+        if hwnd:
+            print(f"  Existing Scrcpy detected, reusing HWND={hwnd}")
+            # scrcpy_proc stays None, so teardown will NOT close the
+            # user-owned/manual Scrcpy process.
+        else:
+            print("  No existing Scrcpy found, launching bundled Scrcpy...")
+            scrcpy_proc = subprocess.Popen(
+                [SCRCPY_PATH, "-s", DEVICE_SERIAL, "--window-title", "scrcpy"],
+                cwd=SCRCPY_DIR,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+            t_wait = time.time()
+            texture_ready = False
+            while time.time() - t_wait < 10.0:
+                line = scrcpy_proc.stdout.readline()
+                if "Texture:" in line:
+                    texture_ready = True
+                    print(f"  [scrcpy] {line.strip()}")
+                    break
+                if line.strip():
+                    print(f"  [scrcpy] {line.strip()}")
+                if scrcpy_proc.poll() is not None:
+                    break
+
+            if not texture_ready:
+                print("FATAL: Scrcpy texture not ready.")
+                stats.stop_reason = StopReason.RUNTIME_ERROR.value
+                return stats
+
+            time.sleep(0.5)
+            hwnd = capture.find_scrcpy_window()
+            if not hwnd:
+                print("FATAL: Could not find Scrcpy window.")
+                stats.stop_reason = StopReason.RUNTIME_ERROR.value
+                return stats
+            print(f"  HWND={hwnd}")
 
         first_frame = capture.grab(hwnd=hwnd)
         if first_frame is None or first_frame.shape != (720, 1544, 3):
@@ -321,8 +362,27 @@ def main():
         event_detector = WorldEventDetector()
         tactical_builder = TacticalStateBuilder()
 
-        # ISOLATED learning pipeline (production Q NEVER touched)
-        isolated_ql = QLearningCore()
+        # ISOLATED learning pipeline (production Q NEVER touched).
+        # Resume the existing Stage 29 isolated memory when it is valid; this
+        # lets repeated training runs accumulate experience without ever
+        # loading or mutating production q_brain.json.
+        isolated_tables = {"roam_q": None, "farm_q": None, "combat_q": None}
+        if os.path.exists(ISOLATED_Q_PATH):
+            try:
+                with open(ISOLATED_Q_PATH, "r", encoding="utf-8") as f:
+                    saved_q = json.load(f)
+                for key in isolated_tables:
+                    value = saved_q.get(key)
+                    isolated_tables[key] = value if isinstance(value, dict) else None
+                print(f"  Resuming isolated Q: {ISOLATED_Q_PATH}")
+            except Exception as e:
+                logger.warning(f"Could not load isolated Q; starting fresh: {e}")
+
+        isolated_ql = QLearningCore(
+            roam_q=isolated_tables["roam_q"],
+            farm_q=isolated_tables["farm_q"],
+            combat_q=isolated_tables["combat_q"],
+        )
         isolated_memory = BrainMemory()
         encoder = TacticalStateEncoder()
         transition_builder = TransitionBuilder(encoder=encoder)
@@ -460,6 +520,7 @@ def main():
         event_counts: Dict[str, int] = Counter()
 
         session_start = time.perf_counter()
+        last_checkpoint_wallclock = time.time()
         tick_num = 0
 
         try:
@@ -472,7 +533,7 @@ def main():
                 if elapsed >= MAX_RUNTIME_SECONDS:
                     stop_reason = StopReason.TIME_LIMIT
                     break
-                if tick_num > MAX_TICKS:
+                if tick_num >= MAX_TICKS:
                     stop_reason = StopReason.TICK_LIMIT
                     break
 
@@ -526,17 +587,36 @@ def main():
                     break
 
                 # --- Track events ---
-                for event in result.events:
-                    event_name = event.type.value if hasattr(event.type, "value") else str(event.type)
-                    event_counts[event_name] += 1
-                    event_timestamps.append(time.time())
-                    stats.events_total += 1
+                if result.events:
+                    # Keep every event for learning/statistics, but the safety
+                    # watchdog ignores tracker-lifecycle notifications. A vision
+                    # frame can legitimately produce ENTERED/LOST changes without
+                    # representing a gameplay failure or action storm.
+                    critical_event_seen = False
+                    critical_event_types = {
+                        EventType.HERO_KILL,
+                        EventType.CREEP_KILL,
+                        EventType.PLAYER_DEATH,
+                    }
+                    for event in result.events:
+                        event_name = event.type.value if hasattr(event.type, "value") else str(event.type)
+                        event_counts[event_name] += 1
+                        stats.events_total += 1
+                        if event.type in critical_event_types:
+                            critical_event_seen = True
 
-                # Event storm watchdog
+                    if critical_event_seen:
+                        event_timestamps.append(time.time())
+
+                # Event storm watchdog: too many critical EVENTFUL TICKS, not raw
+                # tracker lifecycle events.
                 now_time = time.time()
                 recent_events = [t for t in event_timestamps if now_time - t < EVENT_STORM_WINDOW]
                 if len(recent_events) > EVENT_STORM_THRESHOLD:
-                    msg = f"WATCHDOG STOP: Event storm - {len(recent_events)} events in {EVENT_STORM_WINDOW}s"
+                    msg = (
+                        f"WATCHDOG STOP: Event storm - {len(recent_events)} eventful ticks "
+                        f"in {EVENT_STORM_WINDOW}s"
+                    )
                     stats.watchdog_warnings.append(msg)
                     stats.watchdog_stops += 1
                     logger.error(msg)
@@ -606,6 +686,27 @@ def main():
                 exec_str = "OK" if rec.execution_ok else f"FAIL:{rec.execution_error}"
                 print(f"  #{tick_num:03d} | {tick_ms:5.1f}ms | {state_desc:30s} | "
                       f"{action_type:10s} | {exec_str:4s} | ev={events_str} {rew_str}")
+
+                # Durable checkpoint for long isolated training.  This does NOT
+                # touch production Q and makes Ctrl+C/watchdog stops recoverable.
+                if time.time() - last_checkpoint_wallclock >= CHECKPOINT_INTERVAL_SECONDS:
+                    try:
+                        save_isolated_q(
+                            isolated_ql,
+                            ISOLATED_Q_PATH,
+                            {
+                                "stage": "29.1",
+                                "session_duration": round(time.perf_counter() - session_start, 2),
+                                "ticks": tick_num,
+                                "transitions": stats.transitions_total,
+                                "stop_reason": "CHECKPOINT",
+                            },
+                        )
+                        save_session_log(session_log, SESSION_LOG_PATH)
+                        last_checkpoint_wallclock = time.time()
+                        print(f"  [checkpoint] isolated Q + session log saved at tick {tick_num}")
+                    except Exception as e:
+                        logger.warning(f"Checkpoint failed: {e}")
 
         except KeyboardInterrupt:
             stop_reason = StopReason.USER_INTERRUPT
@@ -700,21 +801,20 @@ def main():
             # Q states after
             stats.q_states_after = count_q_states(isolated_ql)
 
-            # Save isolated Q
+            # Final isolated-Q save
             try:
-                q_data = isolated_ql.export_tables()
-                q_data["metadata"] = {
-                    "stage": "28",
-                    "session_duration": stats.duration_sec,
-                    "ticks": stats.ticks,
-                    "transitions": stats.transitions_total,
-                    "stop_reason": stats.stop_reason,
-                }
-                os.makedirs(os.path.dirname(ISOLATED_Q_PATH), exist_ok=True)
-                with open(ISOLATED_Q_PATH, "w", encoding="utf-8") as f:
-                    json.dump(q_data, f, indent=2, ensure_ascii=False)
+                stats.isolated_q_sha = save_isolated_q(
+                    isolated_ql,
+                    ISOLATED_Q_PATH,
+                    {
+                        "stage": "29.1",
+                        "session_duration": stats.duration_sec,
+                        "ticks": stats.ticks,
+                        "transitions": stats.transitions_total,
+                        "stop_reason": stats.stop_reason,
+                    },
+                )
                 stats.isolated_q_path = ISOLATED_Q_PATH
-                stats.isolated_q_sha = sha256(ISOLATED_Q_PATH)
                 print(f"  Isolated Q saved: {ISOLATED_Q_PATH}")
             except Exception as e:
                 logger.warning(f"Failed to save isolated Q: {e}")
@@ -724,11 +824,9 @@ def main():
             stats.baseline_sha_after = sha256(BASELINE_PATH)
 
             # Save session log as JSONL
-            log_path = os.path.join(WORKSPACE_ROOT, "data", "stage28_session_log.jsonl")
+            log_path = SESSION_LOG_PATH
             try:
-                with open(log_path, "w", encoding="utf-8") as f:
-                    for rec in session_log:
-                        f.write(json.dumps(asdict(rec), ensure_ascii=False) + "\n")
+                save_session_log(session_log, log_path)
                 print(f"  Session log saved: {log_path}")
             except Exception as e:
                 logger.warning(f"Failed to save session log: {e}")
@@ -741,7 +839,7 @@ def main():
     # 6. Report
     # ===================================================================
     print(f"\n{SEP}")
-    print("  STAGE 28 -- SESSION REPORT")
+    print("  STAGE 29.1 -- SESSION REPORT")
     print(SEP)
 
     q_ok = (stats.q_brain_sha_before == stats.q_brain_sha_after)
@@ -811,7 +909,7 @@ def main():
         print("\n  *** CRITICAL: q_brain_baseline.json was MODIFIED! ***")
 
     # Save stats summary
-    stats_path = os.path.join(WORKSPACE_ROOT, "data", "stage28_summary.json")
+    stats_path = SUMMARY_PATH
     try:
         with open(stats_path, "w", encoding="utf-8") as f:
             json.dump(asdict(stats), f, indent=2, ensure_ascii=False)
@@ -820,7 +918,7 @@ def main():
         logger.warning(f"Failed to save summary: {e}")
 
     print(f"\n{SEP}")
-    print("  STAGE 28 SESSION COMPLETE")
+    print("  STAGE 29.1 SESSION COMPLETE")
     print(SEP)
 
     return stats

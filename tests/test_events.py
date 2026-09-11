@@ -5,7 +5,8 @@ deduplication, player death, and creep kills on deterministic timestamps.
 """
 
 from world.models import Vector2, WorldState, PlayerState
-from world.tracker import Track
+from world.tracker import Track, TrackLifecycle, WorldTracker
+from vision.detector import Detection
 from world.events import EventType, GameEvent, WorldEventDetector, WatchdogManager
 from vision.hp_detector import HPObservation
 
@@ -42,6 +43,56 @@ def test_target_entered_and_lost():
     assert events2[0].entity_id == 1
     # CRITICAL: TARGET_LOST != HERO_KILL!
     assert not any(e.type == EventType.HERO_KILL for e in events2)
+
+
+
+def test_target_flicker_does_not_emit_entered_or_lost():
+    """A one-frame detector miss must be absorbed by WorldTracker hysteresis."""
+    detector = WorldEventDetector()
+    tracker = WorldTracker(lost_timeout_sec=0.9)
+    ws = WorldState(timestamp=1.0)
+
+    detection = Detection(
+        class_id=1, class_name="hp_enemy", confidence=0.90,
+        x1=480.0, y1=280.0, x2=520.0, y2=320.0,
+    )
+
+    tracks = tracker.update([detection], timestamp=1.0)
+    events = detector.update(ws, tracks, timestamp=1.0)
+    assert [e.type for e in events] == [EventType.TARGET_ENTERED]
+
+    # Detector flicker: tracker keeps the same identity, but marks it temporarily lost.
+    tracks = tracker.update([], timestamp=1.1)
+    assert len(tracks) == 1
+    assert tracks[0].state == TrackLifecycle.TEMPORARILY_LOST
+    events = detector.update(ws, tracks, timestamp=1.1)
+    assert events == []
+
+    # Reappearance before timeout is the same track; no new ENTERED event.
+    tracks = tracker.update([detection], timestamp=1.2)
+    events = detector.update(ws, tracks, timestamp=1.2)
+    assert events == []
+
+    # Real expiry removes the track; only now should LOST fire.
+    tracks = tracker.update([], timestamp=2.2)
+    assert tracks == []
+    events = detector.update(ws, tracks, timestamp=2.2)
+    assert [e.type for e in events] == [EventType.TARGET_LOST]
+
+
+
+def test_track_id_replacement_does_not_emit_target_storm():
+    """A nearby same-class replacement track is lifecycle-equivalent, not a new target event."""
+    detector = WorldEventDetector()
+    ws = WorldState(timestamp=1.0)
+    old = make_track(1, 500.0, 300.0, name="hp_enemy")
+    assert [e.type for e in detector.update(ws, [old], timestamp=1.0)] == [EventType.TARGET_ENTERED]
+
+    # Old ID disappears and a new ID appears in the same area during a short
+    # association hiccup. The replacement must not create LOST + ENTERED churn.
+    replacement = make_track(2, 535.0, 315.0, name="hp_enemy")
+    events = detector.update(ws, [replacement], timestamp=1.4)
+    assert events == []
 
 
 def test_hero_disappearance_without_combat_is_not_kill():

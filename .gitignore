@@ -53,3 +53,7 @@ logs/*.log
 data/q_brain_isolated_stage28.json
 data/stage28_session_log.jsonl
 data/stage28_summary.json
+# Stage 29 isolated training artifacts
+data/q_brain_isolated_stage29.json
+data/stage29_session_log.jsonl
+data/stage29_summary.json
