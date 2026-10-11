@@ -128,23 +128,23 @@ class V2Runtime:
         # 1. Screen Capture
         # ----------------------------------------------------------------------
         frame = None
-        if self.capture:
-            if hasattr(self.capture, "grab"):
-                frame = self.capture.grab()
-            elif hasattr(self.capture, "capture"):
-                frame = self.capture.capture()
-            elif callable(self.capture):
-                frame = self.capture()
-
-        if frame is None:
-            return RuntimeTickResult(
-                success=False,
-                timestamp=now,
-                frame_captured=False,
-                error="Capture returned None (device or scrcpy window unavailable)",
-            )
-
         try:
+            if self.capture:
+                if hasattr(self.capture, "grab"):
+                    frame = self.capture.grab()
+                elif hasattr(self.capture, "capture"):
+                    frame = self.capture.capture()
+                elif callable(self.capture):
+                    frame = self.capture()
+
+            if frame is None:
+                return RuntimeTickResult(
+                    success=False,
+                    timestamp=now,
+                    frame_captured=False,
+                    error="Capture returned None (device or scrcpy window unavailable)",
+                )
+
             # ------------------------------------------------------------------
             # 2. Vision & Detections
             # ------------------------------------------------------------------
@@ -299,7 +299,7 @@ class V2Runtime:
             return RuntimeTickResult(
                 success=False,
                 timestamp=now,
-                frame_captured=True,
+                frame_captured=frame is not None,
                 error=str(e),
             )
 
@@ -361,3 +361,4 @@ class V2Runtime:
         self._prev_tactical_state = None
         self._prev_action = None
         self._prev_execution_success = True
+
