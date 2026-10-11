@@ -370,6 +370,42 @@ class TestStage21Runtime(unittest.TestCase):
         self.assertFalse(res.frame_captured)
         self.assertIn("Capture returned None", res.error)
 
+    def test_capture_exceptions_are_reported_for_all_capture_contracts(self):
+        def fail_capture():
+            raise RuntimeError("scrcpy window disappeared")
+
+        from types import SimpleNamespace
+        for capture in (SimpleNamespace(grab=fail_capture),
+                        SimpleNamespace(capture=fail_capture), fail_capture):
+            with self.subTest(capture=capture):
+                self.runtime.capture = capture
+                with self.assertLogs("V2Runtime", level="ERROR"):
+                    result = self.runtime.tick()
+                self.assertFalse(result.success)
+                self.assertFalse(result.frame_captured)
+                self.assertIn("scrcpy window disappeared", result.error)
+                self.assertEqual(self.executor.executed_actions, [])
+                self.assertEqual(self.learning.process_calls, [])
+
+    def test_loop_recovers_after_transient_capture_exception(self):
+        original_grab = self.capture.grab
+        calls = []
+
+        def intermittent_grab():
+            calls.append(True)
+            if len(calls) == 1:
+                raise RuntimeError("temporary capture failure")
+            return original_grab()
+
+        self.capture.grab = intermittent_grab
+        with self.assertLogs("V2Runtime", level="ERROR"):
+            ticks = self.runtime.run_loop(max_ticks=2)
+        self.assertEqual(ticks, 2)
+        self.assertEqual(len(self.executor.executed_actions), 1)
+        self.assertTrue(self.capture.closed)
+        self.assertTrue(self.executor.closed)
+        self.assertFalse(self.runtime.is_running)
+
     # --------------------------------------------------------------------------
     # L. Runtime does not duplicate reward / Q-learning logic
     # --------------------------------------------------------------------------
@@ -403,3 +439,4 @@ class TestStage21Runtime(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
