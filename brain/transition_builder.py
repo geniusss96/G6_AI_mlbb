@@ -69,7 +69,8 @@ class TransitionBuilder:
 
         # 2. Validate and extract action identifier
         if isinstance(action, Action):
-            action_name = action.type.value
+            # Control commands may represent several distinct policy choices.
+            action_name = action.tactical_decision or action.type.value
         elif isinstance(action, str):
             action_name = action.strip()
         else:
@@ -128,3 +129,4 @@ class TransitionBuilder:
             next_state_key=next_state_key,
             done=done,
         )
+
