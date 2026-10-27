@@ -1,0 +1,3158 @@
+[
+  {
+    "dataset": "MLBB_Claude_Bot.v2i.yolov8",
+    "names": [
+      "hero",
+      "hero_enemy",
+      "hero_self",
+      "hp_enemy",
+      "hp_self",
+      "jungle-monstr",
+      "jungle_monstr",
+      "minion_ally",
+      "minion_enemy",
+      "money_crab",
+      "red_baff",
+      "turret_ally",
+      "turret_enemy",
+      "vazon"
+    ],
+    "images": {
+      "train": 161,
+      "val": 20,
+      "test": 23
+    },
+    "boxes_by_class": {
+      "train": {
+        "hero": 4,
+        "minion_enemy": 167,
+        "hp_self": 237,
+        "hero_self": 167,
+        "hero_enemy": 116,
+        "minion_ally": 158,
+        "hp_enemy": 162,
+        "turret_enemy": 18,
+        "turret_ally": 40,
+        "money_crab": 13,
+        "vazon": 3,
+        "jungle-monstr": 10,
+        "jungle_monstr": 2
+      },
+      "val": {
+        "hero_self": 26,
+        "minion_ally": 23,
+        "minion_enemy": 22,
+        "hp_self": 31,
+        "hp_enemy": 21,
+        "turret_ally": 6,
+        "hero_enemy": 23,
+        "money_crab": 2,
+        "turret_enemy": 3
+      },
+      "test": {
+        "hp_self": 39,
+        "turret_ally": 14,
+        "minion_ally": 25,
+        "hp_enemy": 28,
+        "hero_self": 23,
+        "minion_enemy": 23,
+        "money_crab": 5,
+        "hero_enemy": 11,
+        "jungle-monstr": 5,
+        "red_baff": 2
+      }
+    },
+    "issues": [],
+    "path_warnings": [
+      "train: declared path unavailable; using local train/images",
+      "val: declared path unavailable; using local valid/images",
+      "test: declared path unavailable; using local test/images"
+    ],
+    "duplicate_groups": [],
+    "cross_split_duplicate_groups": 0,
+    "conflicting_label_groups": []
+  },
+  {
+    "dataset": "MLBB_Combined_v4",
+    "names": [
+      "hp_self",
+      "hp_enemy",
+      "minion_enemy",
+      "minion_ally",
+      "turret_enemy",
+      "turret_ally",
+      "bush",
+      "money_crab",
+      "red_baff",
+      "blue_baff",
+      "vazon",
+      "money",
+      "tron_self",
+      "tron_enemy"
+    ],
+    "images": {
+      "train": 656,
+      "val": 121,
+      "test": 100
+    },
+    "boxes_by_class": {
+      "train": {
+        "bush": 271,
+        "hp_self": 737,
+        "turret_enemy": 50,
+        "minion_ally": 379,
+        "hp_enemy": 525,
+        "turret_ally": 76,
+        "red_baff": 10,
+        "tron_enemy": 7,
+        "blue_baff": 13,
+        "minion_enemy": 337,
+        "money_crab": 15,
+        "tron_self": 7,
+        "vazon": 3,
+        "money": 1
+      },
+      "val": {
+        "bush": 74,
+        "hp_self": 94,
+        "hp_enemy": 68,
+        "minion_ally": 59,
+        "minion_enemy": 60,
+        "turret_enemy": 14,
+        "red_baff": 5,
+        "turret_ally": 14,
+        "money_crab": 3,
+        "blue_baff": 3,
+        "tron_enemy": 1
+      },
+      "test": {
+        "bush": 48,
+        "minion_ally": 67,
+        "hp_enemy": 82,
+        "hp_self": 120,
+        "turret_ally": 21,
+        "minion_enemy": 65,
+        "turret_enemy": 4,
+        "red_baff": 4,
+        "tron_enemy": 1,
+        "money_crab": 5,
+        "vazon": 1
+      }
+    },
+    "issues": [
+      {
+        "split": "train",
+        "image": "datos_Bane_16200_jpg.rf.290632eb8b051c78de7cfc98ede2934e.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_001_jpg.rf.3c28ce76bf0da793ff5af244824400a3.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_003_jpg.rf.e23adcddaa1ea290f79dfdcf764077c6.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_004_jpg.rf.5f028ade899f6eb939e99045437fce75.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_005_jpg.rf.1807ecc7718a04f494617866c214c3be.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_006_jpg.rf.c118742bd5f6f84c9b80959c7b33e89e.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_007_jpg.rf.d608dc3219e30478e267ced839644973.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_008_jpg.rf.610795b152030a234ed6f112578b3c43.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_009_jpg.rf.83f987e35b7557662c29ed7c2fac8b00.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_011_jpg.rf.2001bc4023f639d0dd041687310fb39e.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_013_jpg.rf.cbee057122fe88a4058bff65e4f2d940.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_014_jpg.rf.2c1abc75b5a3dcb85da61521a97d1c26.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_015_jpg.rf.abe733ca283409c5bf970c7c9a41e4ac.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_017_jpg.rf.a74c7ddfb210ea706db871862f85d672.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_018_jpg.rf.d414c9079561031c4f14fbd95e67c6f9.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_019_jpg.rf.6a5db25e8fe48af6019fe7eee7e572e7.jpg",
+        "error": "line 3: box must be normalized with positive size"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_020_jpg.rf.2803c1a59fd3a2ed8c018ea5b0090e58.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_021_jpg.rf.a0af410002615db5092e15806e999376.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_022_jpg.rf.1b2fc8e933367b26fb6afd9c89f72a94.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_023_jpg.rf.9f1c5be9414a0887bd5b345145079256.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_024_jpg.rf.0b9717711bcfb9d2b883b80d76d1d1cf.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_026_jpg.rf.83e45deb615cbbb8cdab90e3c710da2c.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_028_jpg.rf.a8d0c662cb0dc5f9c27643f303fe69ef.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_030_jpg.rf.ab28f7a38bb22485936544241a478075.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_031_jpg.rf.581cbd8f2f5a267e7f1d12e341b685ae.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_033_jpg.rf.f16016a568c7280c7db5997446ef787d.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_034_jpg.rf.c13e977953c02d59adb60c05926e78ab.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_036_jpg.rf.944dd6ba1aa5d4bd574aa83094a65b71.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_037_jpg.rf.d8d83ce5d4f962df9099b84f594feda6.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_039_jpg.rf.137edeb1a5e64b813719cdb467ea36f4.jpg",
+        "error": "line 2: box must be normalized with positive size"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_041_jpg.rf.63bf2f47f73e47c8c6b1e6fefa488af3.jpg",
+        "error": "line 2: box must be normalized with positive size"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_042_jpg.rf.5c4e1c92d799c2e966f7ccee9e696369.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_043_jpg.rf.922f7b75654869a03e8ffbb1b0606031.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_044_jpg.rf.e52ee02d8c8cb0ca6adf645e1fe7237d.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_049_jpg.rf.4ad28d6d5d5032df52d186698a3ad97e.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_051_jpg.rf.cdba8bd811339b3072949e455a6f6af8.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_053_jpg.rf.3c0960ecf3ecb3569069394a50849c65.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_059_jpg.rf.0d7d314f458407c303487c2f76265ad8.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_064_jpg.rf.b2383a685b5faebdc80b4cb06f5b5dbb.jpg",
+        "error": "line 7: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_071_jpg.rf.e993c8012dd90db3d3965efbf241c9f6.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_092_jpg.rf.545a1886abe0ec284d120d93b4521add.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_095_jpg.rf.84a375cbb1966c8f55fae058795ee2b1.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_103_jpg.rf.d0a010aae9f7260e3894272a97a15bf8.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_104_jpg.rf.f09f9372ae75c69e5df554c09c477678.jpg",
+        "error": "line 9: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_106_jpg.rf.9b5dd844ee2ce3491d481df956426221.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_107_jpg.rf.7adb6b9bef9d31c751d18119cd5ad508.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Image_110_jpg.rf.cd69cec4e5276ce4f321f3c9284d1d4c.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Lesly_002_jpg.rf.364429ceae2acd38be0f8160efd271c1.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Lesly_003_jpg.rf.6e05b200efcdbcd66b25115cf7911fef.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Lesly_004_jpg.rf.f4763a77852a377c12b8ebce2543f464.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Lesly_010_jpg.rf.03e892418590398d0b9bc91632241f25.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Lesly_012_jpg.rf.91682b75eda1e9aa73dcbc02f152681c.jpg",
+        "error": "line 7: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Lesly_019_jpg.rf.72e1f819b6ee4b4ec45f072f44642c7f.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Lesly_023_jpg.rf.d66c228898e59a85b4bd81b377cc964c.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Lesly_031_jpg.rf.132c3734cbbb27c7cf1ffe6e2c2bfbea.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_002_jpg.rf.1280519a7570af21a3c9f3e9b043a00d.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_004_jpg.rf.3791dffad568261209d32ed73d94e4dc.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_006_jpg.rf.b86ddc0b7b737b85cf3ecd81b452417b.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_008_jpg.rf.42f892b2163e5f4f31d46e720b6b8a2d.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_009_jpg.rf.00eda9c10dc39a4b72c517dc64524f3d.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_011_jpg.rf.7d531a976e8844e57813951988aacbc3.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_013_jpg.rf.2d2d2583f643feafa465149937a5bc36.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_015_jpg.rf.f60ecd58e2526224e21dbaad13470da1.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_016_jpg.rf.b3c87add10f40b8470a30e894645cff9.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_020_jpg.rf.822846ae952c44ca677b98f0b9d5ef79.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_021_jpg.rf.bce763d128c29e4764c269bfc8c247c0.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_022_jpg.rf.19518698747f048c9c588b608fe6521c.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_023_jpg.rf.e6a4e37e4fa297141956dfc9549c1190.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_024_jpg.rf.bd6a6c37f9b7164938183d0934fc7052.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_025_jpg.rf.10ed0541b9c94675c56d0152344af1cf.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_027_jpg.rf.8675b511786024212aeb52d1935c99be.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_029_jpg.rf.c01adc05160a5fa64a088f43c8d6b416.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_030_jpg.rf.0eed564d6fa0d97c46814d6018176adc.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_031_jpg.rf.e6278a80d1a5f301472557d026c67dd7.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_033_jpg.rf.e7837f8b56dc85375aba6663a5ba0bb9.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_034_jpg.rf.fdc2ad51a59f79df604c7ffdee6810b4.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_035_jpg.rf.f389943f8fa8ad3cdc2a79cfc17e4abe.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_036_jpg.rf.a22ec6f2fea2f4f1d5c1f0e69f295d95.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_038_jpg.rf.49725d9f9b7bfc2e6733042ef6329f18.jpg",
+        "error": "line 7: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Tigreal_047_jpg.rf.b2811dcd2608bddb26a255e52cc2767c.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_004_jpg.rf.6b9c37d71f9f27b745c1eb829d1d1531.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_006_jpg.rf.223431e6b94447cfe3296ab39fef4e61.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_007_jpg.rf.f29dea7ff344744902078bc07ace0229.jpg",
+        "error": "line 2: box must be normalized with positive size"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_009_jpg.rf.d70393debaacc146e1168bc654f9cfbd.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_015_jpg.rf.b75a589ed39114d77e4b05fe9011f217.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_016_jpg.rf.b8fe08b95013fcc96c2ac62e8ffcee72.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_017_jpg.rf.3ba0d30c1ccc16b3ed01da574c55dfa0.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_018_jpg.rf.3c33581fe64875e0d0c38ff32fc50067.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_019_jpg.rf.bddbf6d9be266f63df04aaecc3a57068.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_020_jpg.rf.a90ce2d5c658f9f7ebb0830abb854290.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_021_jpg.rf.b10a1dfb0f259f66a6ca73fdc9a1a4c4.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_022_jpg.rf.850581ba49ba571f86ff4d12c59e3bd4.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_023_jpg.rf.ac045d6e980f6d09aef6ca59e953630f.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_024_jpg.rf.c17d4efc61d3fadaa7ab89f655cdabcd.jpg",
+        "error": "line 6: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_025_jpg.rf.d08b1925bbe7e180d854e66ec2de10a0.jpg",
+        "error": "line 2: box must be normalized with positive size"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_026_jpg.rf.4ede46306edd8d658b416aafb0f46907.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_027_jpg.rf.73b4075c276e8546ab96b2d2a6cfb390.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_033_jpg.rf.075f073661b59a7a5cb90cf05eb55c15.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_034_jpg.rf.a54b5d99e12c31f9718434f02cb52a81.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_036_jpg.rf.ab9c2ac572e3a735d4bb408573829cd6.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_037_jpg.rf.6eca79c734767aa75c7a65c2e734338e.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_038_jpg.rf.8dfb4acf2892d22294c844abd5c75155.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_041_jpg.rf.a74c9faa0da947255e7e10460b481777.jpg",
+        "error": "line 2: box must be normalized with positive size"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_043_jpg.rf.c4628760d9f9e41b4cc6a2b2e65c8d8c.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_045_jpg.rf.952d6af9fcaeb4c3df82bb6b3c50602d.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_046_jpg.rf.9ed061c1bdff9ed8ff0a1fec68270383.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_047_jpg.rf.e50a81f0297a8c824dba92e1766d327f.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_050_jpg.rf.6c307aee000d655fb2bc7c1a76259bce.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_051_jpg.rf.de6a277e7bf6f0df8c0fff7e751777cc.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_057_jpg.rf.950d1ce06cd2e467e9cfd8ef01dd2a2a.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_070_jpg.rf.8acfc9822c155a5ed3b764b3c37e66bd.jpg",
+        "error": "line 3: box must be normalized with positive size"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_072_jpg.rf.8430e5a93d27cb1eeb13a910c6435985.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_073_jpg.rf.9935d78a854b0a76346cd7a51af8ce8d.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_075_jpg.rf.bd865b65d9792bd67597914975a9d5dc.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_076_jpg.rf.9d2ef032d545a2ea2a333a8902925c6e.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_077_jpg.rf.686bd387e2fc77046b97f22b3ad6d7dc.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_078_jpg.rf.82f028d8a06bd19c47259885aa94b0c7.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana1_079_jpg.rf.3a5050b381c798b808cbe98d2bf035f8.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_002_jpg.rf.3853daf4e528fcaeea3772157a63a99e.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_005_jpg.rf.d8e0dc1ce1967cd86e6a2284642f842f.jpg",
+        "error": "line 2: box must be normalized with positive size"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_007_jpg.rf.9205bb3a1217f3e86c0f4a1e7652d518.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_008_jpg.rf.a40036c59612c8f8b50d3d7ab1dc3b81.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_009_jpg.rf.b5c37273cc88cb879c6b56bd0dff97c5.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_011_jpg.rf.7507c821a46f32176095b1d440e7a1cf.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_012_jpg.rf.4a690f98c0c0d68c836afedba4916311.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_013_jpg.rf.a04ad805c40edfeac3adf487215ea94c.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_014_jpg.rf.e0296154614a8cf4ad10f1ada8145981.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_015_jpg.rf.c32fb1fadfd820f0113547546632c5b8.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_017_jpg.rf.e1adc5971eb65dcdb53144d5c02fa7c0.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_018_jpg.rf.7322cedab2dd260d63ecbd740c845456.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_020_jpg.rf.fdb879a44cec2f67b5ba036f318f7aad.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_022_jpg.rf.81fee08725768e898bb185ac2a20f860.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_025_jpg.rf.7f266bc0997227e5542a02ce813e8fbd.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_027_jpg.rf.9af25730fce1cde8441b455faf55f4cc.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_028_jpg.rf.1b8a132fead7ab91df90454d62a963a0.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_030_jpg.rf.b39b425a67d942a250809b8362da87d5.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_031_jpg.rf.f66ac8eaf67e909604c83f2babdc6f5e.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_032_jpg.rf.45ce505e2f88c0255a5e6aa51f3508ff.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_035_jpg.rf.7a7812af035031297ed22e083a7ee750.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_038_jpg.rf.9fb8b60d6b6a2054369f687c78ac8448.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_041_jpg.rf.57b2fca70845be36cf19e8c74fa8cc6c.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_043_jpg.rf.f7afec650a96c2ffe42ecb25d33ca730.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_047_jpg.rf.d2a5545a68349071b066426f59a9f580.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_048_jpg.rf.52fb725b85d9208ea31c956daa0bc52e.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_050_jpg.rf.412ce29912d556b6f46458d0a705aab9.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_051_jpg.rf.0f7313d00c311e487249cc098efcc7d8.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_053_jpg.rf.6b683c8464514e99355262d8260e2f4f.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_055_jpg.rf.b7255aea8877f2b84890e9b1f4b41c6c.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_058_jpg.rf.f9c0f15b60686a8afea395a5d1d2459e.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "train",
+        "image": "datos_Vexana2_060_jpg.rf.3ef35563574d9eb6f18f9742297ffcd6.jpg",
+        "error": "line 1: box must be normalized with positive size"
+      },
+      {
+        "split": "val",
+        "image": "datos_Arlott_19200_jpg.rf.5ca1eaee6a6efc680ee575fa90179642.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Image_010_jpg.rf.9ec4ba528a19cb3c6367fc098ab97233.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Image_032_jpg.rf.d6569ad1c39dba891c1fa7d3c575bea3.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Image_038_jpg.rf.8a35210907b7a49598908f0439c3bea1.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Image_046_jpg.rf.563443129f38d1d013e8b81291641864.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Image_047_jpg.rf.4d9f2fe1f1a424997e9fce3b1a098430.jpg",
+        "error": "line 4: box must be normalized with positive size"
+      },
+      {
+        "split": "val",
+        "image": "datos_Image_050_jpg.rf.4dbc9d2d281b447003ccdd148279ae1a.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Image_054_jpg.rf.4d8de40a9fc608c72b9f2137d2a27a67.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Image_077_jpg.rf.71ed2a95c81ffcb61c29256be888720d.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Image_109_jpg.rf.4ecddcc7c52d796db03c910e0cfc6a09.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Lesly_006_jpg.rf.5c24254592a0455b578d762617c60a9c.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Lesly_007_jpg.rf.661ea23a69b46f7cb5d78bbdbed04e6c.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Lesly_022_jpg.rf.c547ff82c1e09ce25db935ac18b7a781.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_003_jpg.rf.4db3d9572d4810d189797eea857b66e7.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_005_jpg.rf.eff53267fa53e4caf4763a8b5bddaaa1.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_010_jpg.rf.2046a2452db60cbeaa94d0dfc6cd05c3.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_012_jpg.rf.7450df5e481099bd95f8ec788b5d2915.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_014_jpg.rf.8a691db5d25e1a214f8e492295897ef5.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_017_jpg.rf.1cbc9340193f23a2df5c742d742a1a78.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_018_jpg.rf.31d013c7f361315887e7eeea85224799.jpg",
+        "error": "line 2: box must be normalized with positive size"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_032_jpg.rf.8804189aeef5377fc655fac3881fdcab.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_040_jpg.rf.7bd476353e11a38461c0a7389f2679be.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_066_jpg.rf.83f2516e62f10ad450b8be53a92c2a3d.jpg",
+        "error": "line 7: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Tigreal_067_jpg.rf.b42acafe46d40e27dbee5ddba7fe0c56.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana1_001_jpg.rf.c05c6d448f0501100b4520aa11056004.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana1_002_jpg.rf.d888b7a4ee97490e2f73e8c0918d46c1.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana1_028_jpg.rf.fb17e9650b0a3096d419822c5e6574f4.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana1_029_jpg.rf.05cac22acdd6c5e0ccb3bc60642ef022.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana1_031_jpg.rf.c9dc340574c8bf2b3351b9b425fe12ac.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana1_032_jpg.rf.a79951523012974bdb5547145eaac125.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana1_044_jpg.rf.41a8ff6890c0935da58eb097da5561e1.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana1_048_jpg.rf.d9c44865dcb16ccb020ff0ab85fb3c54.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana1_074_jpg.rf.7c87f4bb60d52165d18aa508faa5b55f.jpg",
+        "error": "line 1: box must be normalized with positive size"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana2_004_jpg.rf.764f6f98db8ee457baaf9027d3e10f4b.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana2_010_jpg.rf.db9fac269e7c2fc9e80ff5862f57517b.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana2_016_jpg.rf.f722ebd463c82b15889bdf5a6f7bda30.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana2_021_jpg.rf.f87996432f99b9d6e6b47f164a02c660.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana2_036_jpg.rf.6271b6ad314d8ef45455d56f579b3518.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana2_037_jpg.rf.d697bc83c3d8f06ffccbf84ad0a7e1f9.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana2_042_jpg.rf.46e090b05f017a1104c8855b19162a0a.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana2_049_jpg.rf.54dca739035b811889088ff327ee7f9f.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "val",
+        "image": "datos_Vexana2_056_jpg.rf.f30df625db11af023d112228348f07e4.jpg",
+        "error": "line 4: box must be normalized with positive size"
+      },
+      {
+        "split": "test",
+        "image": "datos_Image_012_jpg.rf.230245efabda5445baa99a084b335a7f.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Image_025_jpg.rf.bb33badeb3d01306c725e5c9d61f8ef4.jpg",
+        "error": "line 4: box must be normalized with positive size"
+      },
+      {
+        "split": "test",
+        "image": "datos_Image_029_jpg.rf.eecdbe74503b6143130a5d4b95b31b6a.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Image_035_jpg.rf.fc2d96c6cd0bd47495627e15579b501c.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Image_048_jpg.rf.f62483b0a7d45bda11fc8f588cdff02c.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Image_101_jpg.rf.25ced9d8e27666f7f78971a3dbbe3575.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Image_105_jpg.rf.9453545a387cd83ff7486a7a5c4b953c.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Lesly_009_jpg.rf.10617e20d6d396ae75b998c9905a2770.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Vexana1_039_jpg.rf.6030085e629c21aa60ea0bfd144dd773.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Vexana1_081_jpg.rf.249cf786160c3d7cd958657156fad534.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Vexana2_001_jpg.rf.a46cc667097cb1abc197f111e740fa1a.jpg",
+        "error": "line 4: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Vexana2_003_jpg.rf.aad245168a1d27d22147642008a63a9b.jpg",
+        "error": "line 1: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Vexana2_023_jpg.rf.09189e5b253e72800808e2ec12c89460.jpg",
+        "error": "line 2: box must be normalized with positive size"
+      },
+      {
+        "split": "test",
+        "image": "datos_Vexana2_024_jpg.rf.7cd2261a9873d3dc0f4395e73d68a955.jpg",
+        "error": "line 2: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Vexana2_026_jpg.rf.b5c505eedc4a348e4b61efa89ddf07ac.jpg",
+        "error": "line 5: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Vexana2_044_jpg.rf.f0bee2fe33991625ec1db39e2840010e.jpg",
+        "error": "line 3: box extends outside image"
+      },
+      {
+        "split": "test",
+        "image": "datos_Vexana2_045_jpg.rf.92bbd2c539bbf8a075e70e6332a8037d.jpg",
+        "error": "line 2: box extends outside image"
+      }
+    ],
+    "path_warnings": [
+      "train: declared path unavailable; using local train/images",
+      "val: declared path unavailable; using local valid/images",
+      "test: declared path unavailable; using local test/images"
+    ],
+    "duplicate_groups": [],
+    "cross_split_duplicate_groups": 0,
+    "conflicting_label_groups": []
+  },
+  {
+    "dataset": "MLBB_Datos_v1",
+    "names": [
+      "Aamon",
+      "Adc_Aliado",
+      "Adc_Enemigo",
+      "Alpha",
+      "Alucard",
+      "Arbusto",
+      "Argos",
+      "Arlott",
+      "Aurora",
+      "Badang",
+      "Balmont",
+      "Bane",
+      "Barats",
+      "Belerick",
+      "Buff_Red",
+      "Buff_blue",
+      "Cangrejo_Exp",
+      "Cangrejo_Oro",
+      "Cecilion",
+      "Chang-e",
+      "Clint",
+      "Dyrrot",
+      "EXP_Lane",
+      "Energia",
+      "Esbirro_Aliado",
+      "Esbirro_Enemigo",
+      "Esbirro_Jungla",
+      "Estes",
+      "Eudora",
+      "Exp_Aliado",
+      "Exp_Enemigo",
+      "Franco",
+      "Freddrin",
+      "Furia_Gattotkaka",
+      "Gattotkaka",
+      "Gold_Lane",
+      "Gord",
+      "Granger",
+      "Guinever",
+      "Gusion",
+      "HP_Aliado",
+      "HP_Enemigo",
+      "HP_Heroe_Principal",
+      "Hanabi",
+      "Hayabusa",
+      "Hechizo_Batalla",
+      "Heroe_Muerto",
+      "Jawhead",
+      "Julian",
+      "Jungla_Aliado",
+      "Jungla_Enemigo",
+      "Karina",
+      "Karry",
+      "Lancelot",
+      "Layla",
+      "Lechuga",
+      "Lesly",
+      "Ling",
+      "Lolita",
+      "Lord",
+      "Lord_Activo",
+      "Lord_Mapa",
+      "Lord_Mejorado_Mapa",
+      "Lord_Vexana",
+      "Mana",
+      "Matilda",
+      "Mid_Aliado",
+      "Mid_Enemigo",
+      "Minimapa",
+      "Minotauro",
+      "Miya",
+      "Moskov",
+      "Nana",
+      "Natalia",
+      "Natan",
+      "Nexo_Aliado",
+      "Nexo_Enemigo",
+      "Nolan",
+      "Pasiva_Granger",
+      "Pasiva_Guinever",
+      "Pasiva_Phoveus",
+      "Phoveus",
+      "Roamer_Aliado",
+      "Roamer_Enemigo",
+      "Skill1",
+      "Skill2",
+      "Skill3",
+      "Suyou",
+      "Terizla",
+      "Tigreal",
+      "Torre_Aliada",
+      "Torre_Enemiga",
+      "Torre_destruida",
+      "Tortuga",
+      "Tortuga_mapa",
+      "Urano",
+      "Vale",
+      "Vexana",
+      "Wanwan",
+      "Yu Zhong",
+      "Zhuxin",
+      "Zylong",
+      "skill3"
+    ],
+    "images": {
+      "train": 314,
+      "val": 90,
+      "test": 45
+    },
+    "boxes_by_class": {
+      "train": {
+        "Arbusto": 183,
+        "Skill1": 48,
+        "Minimapa": 91,
+        "Skill2": 65,
+        "Gattotkaka": 2,
+        "HP_Heroe_Principal": 92,
+        "Torre_Enemiga": 19,
+        "Jungla_Aliado": 83,
+        "Adc_Aliado": 87,
+        "Mid_Aliado": 81,
+        "Exp_Aliado": 83,
+        "skill3": 31,
+        "Julian": 5,
+        "HP_Aliado": 38,
+        "Arlott": 41,
+        "Roamer_Aliado": 75,
+        "Exp_Enemigo": 43,
+        "Cangrejo_Exp": 6,
+        "Esbirro_Jungla": 7,
+        "Adc_Enemigo": 29,
+        "Hechizo_Batalla": 43,
+        "Esbirro_Aliado": 77,
+        "HP_Enemigo": 37,
+        "Torre_destruida": 13,
+        "Mid_Enemigo": 33,
+        "Mana": 78,
+        "Skill3": 16,
+        "Roamer_Enemigo": 25,
+        "Lord_Activo": 8,
+        "Hanabi": 3,
+        "Gord": 3,
+        "Heroe_Muerto": 2,
+        "Buff_Red": 2,
+        "Lord_Mejorado_Mapa": 1,
+        "Gold_Lane": 24,
+        "EXP_Lane": 24,
+        "Nexo_Enemigo": 5,
+        "Argos": 3,
+        "Buff_blue": 2,
+        "Torre_Aliada": 10,
+        "Esbirro_Enemigo": 32,
+        "Jungla_Enemigo": 17,
+        "Vexana": 13,
+        "Lord_Vexana": 6,
+        "Urano": 4,
+        "Chang-e": 4,
+        "Layla": 2,
+        "Miya": 7,
+        "Tortuga_mapa": 4,
+        "Nana": 1,
+        "Bane": 14,
+        "Belerick": 7,
+        "Eudora": 4,
+        "Tigreal": 17,
+        "Yu Zhong": 2,
+        "Moskov": 1,
+        "Lord_Mapa": 6,
+        "Lord": 2,
+        "Clint": 2,
+        "Energia": 8,
+        "Hayabusa": 1,
+        "Vale": 1,
+        "Freddrin": 2,
+        "Lesly": 7,
+        "Franco": 1,
+        "Suyou": 2,
+        "Aurora": 3,
+        "Karry": 3,
+        "Granger": 1,
+        "Guinever": 2,
+        "Matilda": 2,
+        "Lancelot": 1,
+        "Phoveus": 1,
+        "Pasiva_Guinever": 1
+      },
+      "val": {
+        "Skill1": 14,
+        "Arbusto": 48,
+        "skill3": 13,
+        "Arlott": 10,
+        "HP_Heroe_Principal": 22,
+        "Minimapa": 21,
+        "Skill2": 18,
+        "Jungla_Aliado": 20,
+        "Roamer_Aliado": 16,
+        "Adc_Aliado": 21,
+        "Mid_Aliado": 21,
+        "Adc_Enemigo": 10,
+        "Exp_Aliado": 20,
+        "Exp_Enemigo": 9,
+        "Karina": 1,
+        "Julian": 3,
+        "Hechizo_Batalla": 12,
+        "Mid_Enemigo": 11,
+        "Jungla_Enemigo": 6,
+        "Mana": 30,
+        "HP_Enemigo": 13,
+        "HP_Aliado": 16,
+        "Esbirro_Aliado": 19,
+        "Esbirro_Enemigo": 20,
+        "Torre_Enemiga": 5,
+        "Tortuga_mapa": 3,
+        "Roamer_Enemigo": 5,
+        "Lord_Activo": 4,
+        "Nana": 2,
+        "Hanabi": 1,
+        "Torre_destruida": 2,
+        "Gord": 1,
+        "Urano": 1,
+        "EXP_Lane": 6,
+        "Gold_Lane": 5,
+        "Argos": 2,
+        "Dyrrot": 1,
+        "Clint": 1,
+        "Bane": 3,
+        "Tigreal": 2,
+        "Vale": 2,
+        "Lord_Mapa": 1,
+        "Tortuga": 1,
+        "Skill3": 3,
+        "Belerick": 2,
+        "Yu Zhong": 1,
+        "Energia": 2,
+        "Buff_Red": 1,
+        "Miya": 2,
+        "Lord_Mejorado_Mapa": 1,
+        "Torre_Aliada": 1,
+        "Lesly": 2,
+        "Vexana": 3,
+        "Karry": 2,
+        "Lancelot": 2,
+        "Terizla": 1,
+        "Matilda": 2,
+        "Lord_Vexana": 1,
+        "Nexo_Enemigo": 1,
+        "Granger": 1
+      },
+      "test": {
+        "Arbusto": 36,
+        "Esbirro_Aliado": 15,
+        "Minimapa": 18,
+        "Urano": 1,
+        "HP_Enemigo": 9,
+        "skill3": 8,
+        "Arlott": 7,
+        "HP_Heroe_Principal": 16,
+        "Adc_Aliado": 15,
+        "Mid_Aliado": 16,
+        "Jungla_Aliado": 17,
+        "Mid_Enemigo": 12,
+        "Roamer_Aliado": 18,
+        "Exp_Aliado": 14,
+        "Exp_Enemigo": 11,
+        "Gattotkaka": 2,
+        "Skill1": 9,
+        "Cangrejo_Exp": 1,
+        "Torre_Aliada": 2,
+        "Esbirro_Enemigo": 11,
+        "Skill2": 12,
+        "Argos": 1,
+        "Hechizo_Batalla": 9,
+        "Tortuga_mapa": 2,
+        "EXP_Lane": 7,
+        "Gold_Lane": 7,
+        "Jawhead": 1,
+        "Mana": 17,
+        "Esbirro_Jungla": 2,
+        "Roamer_Enemigo": 5,
+        "Chang-e": 2,
+        "Adc_Enemigo": 4,
+        "Torre_destruida": 2,
+        "Vexana": 6,
+        "HP_Aliado": 11,
+        "Nana": 1,
+        "Torre_Enemiga": 1,
+        "Miya": 1,
+        "Tortuga": 2,
+        "Julian": 1,
+        "Gord": 1,
+        "Jungla_Enemigo": 6,
+        "Karina": 1,
+        "Eudora": 1,
+        "Tigreal": 3,
+        "Bane": 3,
+        "Moskov": 1,
+        "Badang": 1,
+        "Vale": 2,
+        "Belerick": 1,
+        "Lord_Activo": 1,
+        "Energia": 2,
+        "Skill3": 1,
+        "Lesly": 2,
+        "Pasiva_Guinever": 1,
+        "Lord_Mapa": 1,
+        "Guinever": 1,
+        "Nexo_Enemigo": 1
+      }
+    },
+    "issues": [
+      {
+        "split": "train",
+        "image": "Arlott_1800_jpg.rf.088238e4c79d34d04e1f56057693367e.jpg",
+        "error": "line 4: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Arlott_39000_jpg.rf.1a70c48311eb7503ccfb0446eb0551d8.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Arlott_6000_jpg.rf.3ad1e64c9a804e18280b3142d0fe48c6.jpg",
+        "error": "line 16: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Arlott_7200_jpg.rf.156b1c860851196a6f3f5322a13470b3.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Bane_10200_jpg.rf.b70aa8a69202225183d74315d7b88030.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Bane_15600_jpg.rf.a78d70419682fdb4c7a4d92b4a27a97a.jpg",
+        "error": "line 3: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Bane_16200_jpg.rf.290632eb8b051c78de7cfc98ede2934e.jpg",
+        "error": "line 9: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Bane_18000_jpg.rf.1d53eecfce09bcb56f8f67ccc07a03fa.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Bane_3600_jpg.rf.e4137ed35804a1643a497b58a88a5771.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Bane_5400_jpg.rf.e4d8a4e09b474dd4de499f42a37998f1.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_001_jpg.rf.3c28ce76bf0da793ff5af244824400a3.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_002_jpg.rf.584bc10d3788e0c61029bf9a8128d02f.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_003_jpg.rf.e23adcddaa1ea290f79dfdcf764077c6.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_004_jpg.rf.5f028ade899f6eb939e99045437fce75.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_005_jpg.rf.1807ecc7718a04f494617866c214c3be.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_006_jpg.rf.c118742bd5f6f84c9b80959c7b33e89e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_007_jpg.rf.d608dc3219e30478e267ced839644973.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_008_jpg.rf.610795b152030a234ed6f112578b3c43.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_009_jpg.rf.83f987e35b7557662c29ed7c2fac8b00.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_011_jpg.rf.2001bc4023f639d0dd041687310fb39e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_013_jpg.rf.cbee057122fe88a4058bff65e4f2d940.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_014_jpg.rf.2c1abc75b5a3dcb85da61521a97d1c26.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_015_jpg.rf.abe733ca283409c5bf970c7c9a41e4ac.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_016_jpg.rf.93a90ba16c711eca6fb9b59bee2ea098.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_017_jpg.rf.a74c7ddfb210ea706db871862f85d672.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_018_jpg.rf.d414c9079561031c4f14fbd95e67c6f9.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_019_jpg.rf.6a5db25e8fe48af6019fe7eee7e572e7.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_020_jpg.rf.2803c1a59fd3a2ed8c018ea5b0090e58.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_021_jpg.rf.a0af410002615db5092e15806e999376.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_022_jpg.rf.1b2fc8e933367b26fb6afd9c89f72a94.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_023_jpg.rf.9f1c5be9414a0887bd5b345145079256.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_024_jpg.rf.0b9717711bcfb9d2b883b80d76d1d1cf.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_026_jpg.rf.83e45deb615cbbb8cdab90e3c710da2c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_028_jpg.rf.a8d0c662cb0dc5f9c27643f303fe69ef.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_030_jpg.rf.ab28f7a38bb22485936544241a478075.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_031_jpg.rf.581cbd8f2f5a267e7f1d12e341b685ae.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_033_jpg.rf.f16016a568c7280c7db5997446ef787d.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_034_jpg.rf.c13e977953c02d59adb60c05926e78ab.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_036_jpg.rf.944dd6ba1aa5d4bd574aa83094a65b71.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_037_jpg.rf.d8d83ce5d4f962df9099b84f594feda6.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_039_jpg.rf.137edeb1a5e64b813719cdb467ea36f4.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_040_jpg.rf.ea35b1fbea5988e089200ee01a0632f9.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_041_jpg.rf.63bf2f47f73e47c8c6b1e6fefa488af3.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_042_jpg.rf.5c4e1c92d799c2e966f7ccee9e696369.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_043_jpg.rf.922f7b75654869a03e8ffbb1b0606031.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_044_jpg.rf.e52ee02d8c8cb0ca6adf645e1fe7237d.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_049_jpg.rf.4ad28d6d5d5032df52d186698a3ad97e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_051_jpg.rf.cdba8bd811339b3072949e455a6f6af8.jpg",
+        "error": "line 8: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_052_jpg.rf.eb874c0efea9694c9f51d5713414b00a.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_053_jpg.rf.3c0960ecf3ecb3569069394a50849c65.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_055_jpg.rf.4de7d8cd16e17ccf70bb85cd18df8004.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_056_jpg.rf.7054d28a98f5a68dc643f5eb6bf6f7fa.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_057_jpg.rf.e02ee3162a18dd355de960214e98ac4d.jpg",
+        "error": "line 12: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_059_jpg.rf.0d7d314f458407c303487c2f76265ad8.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_060_jpg.rf.05e0f6b43ac272a858f5d8e3e2d73eea.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_063_jpg.rf.706b7d38ce7f1f1618bb11346df68766.jpg",
+        "error": "line 4: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_064_jpg.rf.b2383a685b5faebdc80b4cb06f5b5dbb.jpg",
+        "error": "line 6: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_066_jpg.rf.2de2bf463290c5b707194f2958cf1b93.jpg",
+        "error": "line 13: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_069_jpg.rf.456b595fa1eeadfbdf97cfaa555a5353.jpg",
+        "error": "line 10: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_071_jpg.rf.e993c8012dd90db3d3965efbf241c9f6.jpg",
+        "error": "line 6: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_073_jpg.rf.9d09fd010d666a31b6283fa80013535b.jpg",
+        "error": "line 10: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_075_jpg.rf.d7b93c68b04cf4b5f694e6142e0e6b57.jpg",
+        "error": "line 11: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_076_jpg.rf.6b3b46b29e17ae7ac4c5f2a03d174c98.jpg",
+        "error": "line 10: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_084_jpg.rf.2f8bb1235f28697d644b3ee56374f0c7.jpg",
+        "error": "line 3: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_087_jpg.rf.95ef0f9312d0a4fef68da4909839707a.jpg",
+        "error": "line 6: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_088_jpg.rf.975ea1e99aa208db5e4fdef7bb7420e5.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_089_jpg.rf.65fedf83eb9b0a3afd2c69314669447a.jpg",
+        "error": "line 8: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_092_jpg.rf.545a1886abe0ec284d120d93b4521add.jpg",
+        "error": "line 5: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_093_jpg.rf.f5dd41b1de4839f87fa1338b26cced15.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_094_jpg.rf.2031ea91cc50ea5318a57e9e2d02d9e1.jpg",
+        "error": "line 4: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_095_jpg.rf.84a375cbb1966c8f55fae058795ee2b1.jpg",
+        "error": "line 10: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_096_jpg.rf.60d6c4cb95d2701ee425a886924df7f1.jpg",
+        "error": "line 10: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_100_jpg.rf.f5d4665437c573e8ce45722e2139790c.jpg",
+        "error": "line 6: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_102_jpg.rf.ab946a21bbb66fee2d01add39fd79d4c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_103_jpg.rf.d0a010aae9f7260e3894272a97a15bf8.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_104_jpg.rf.f09f9372ae75c69e5df554c09c477678.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_106_jpg.rf.9b5dd844ee2ce3491d481df956426221.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_107_jpg.rf.7adb6b9bef9d31c751d18119cd5ad508.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Image_110_jpg.rf.cd69cec4e5276ce4f321f3c9284d1d4c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_001_jpg.rf.da2f69092248cf757830a88d1f98e258.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_002_jpg.rf.364429ceae2acd38be0f8160efd271c1.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_003_jpg.rf.6e05b200efcdbcd66b25115cf7911fef.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_004_jpg.rf.f4763a77852a377c12b8ebce2543f464.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_005_jpg.rf.0a82d1af72250c22e497278e7a91fef9.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_008_jpg.rf.45cbc53fa0f14e5f43127d06fbe44682.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_010_jpg.rf.03e892418590398d0b9bc91632241f25.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_012_jpg.rf.91682b75eda1e9aa73dcbc02f152681c.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_016_jpg.rf.81e4f82ec8d956137e0726bcf2ac0229.jpg",
+        "error": "line 9: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_019_jpg.rf.72e1f819b6ee4b4ec45f072f44642c7f.jpg",
+        "error": "line 5: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_021_jpg.rf.95ee1437fe4ece1c873f4e3c834540a3.jpg",
+        "error": "line 4: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_023_jpg.rf.d66c228898e59a85b4bd81b377cc964c.jpg",
+        "error": "line 11: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_024_jpg.rf.e8c843705c409db983b24e9f312de909.jpg",
+        "error": "line 6: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_027_jpg.rf.24cd64bf96ed736666e0758f9ed9ef6d.jpg",
+        "error": "line 9: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_028_jpg.rf.1616fff3bef3ecade8521ac50dba69e3.jpg",
+        "error": "line 19: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_029_jpg.rf.530ee39006e08d8f0dba0f700260f6ad.jpg",
+        "error": "line 3: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_030_jpg.rf.3b7743b8fcdac7b7d5faf3a8e9667af0.jpg",
+        "error": "line 8: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_031_jpg.rf.132c3734cbbb27c7cf1ffe6e2c2bfbea.jpg",
+        "error": "line 13: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Lesly_032_jpg.rf.d275607575cbb1d35f93d45d3c80e8d7.jpg",
+        "error": "line 3: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_001_jpg.rf.9f826524205abe534e9fbbc79a2b7a11.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_002_jpg.rf.1280519a7570af21a3c9f3e9b043a00d.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_004_jpg.rf.3791dffad568261209d32ed73d94e4dc.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_006_jpg.rf.b86ddc0b7b737b85cf3ecd81b452417b.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_008_jpg.rf.42f892b2163e5f4f31d46e720b6b8a2d.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_009_jpg.rf.00eda9c10dc39a4b72c517dc64524f3d.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_011_jpg.rf.7d531a976e8844e57813951988aacbc3.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_013_jpg.rf.2d2d2583f643feafa465149937a5bc36.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_015_jpg.rf.f60ecd58e2526224e21dbaad13470da1.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_016_jpg.rf.b3c87add10f40b8470a30e894645cff9.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_019_jpg.rf.a58f49f603e4cc90ed73ac106e019733.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_020_jpg.rf.822846ae952c44ca677b98f0b9d5ef79.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_021_jpg.rf.bce763d128c29e4764c269bfc8c247c0.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_022_jpg.rf.19518698747f048c9c588b608fe6521c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_023_jpg.rf.e6a4e37e4fa297141956dfc9549c1190.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_024_jpg.rf.bd6a6c37f9b7164938183d0934fc7052.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_025_jpg.rf.10ed0541b9c94675c56d0152344af1cf.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_027_jpg.rf.8675b511786024212aeb52d1935c99be.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_029_jpg.rf.c01adc05160a5fa64a088f43c8d6b416.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_030_jpg.rf.0eed564d6fa0d97c46814d6018176adc.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_031_jpg.rf.e6278a80d1a5f301472557d026c67dd7.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_033_jpg.rf.e7837f8b56dc85375aba6663a5ba0bb9.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_034_jpg.rf.fdc2ad51a59f79df604c7ffdee6810b4.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_035_jpg.rf.f389943f8fa8ad3cdc2a79cfc17e4abe.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_036_jpg.rf.a22ec6f2fea2f4f1d5c1f0e69f295d95.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_037_jpg.rf.a7a4ade405bc2affcce0cc9a74ee071f.jpg",
+        "error": "line 6: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_038_jpg.rf.49725d9f9b7bfc2e6733042ef6329f18.jpg",
+        "error": "line 4: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_041_jpg.rf.eed13f7c768f4c7e77be2301eb3f5cc7.jpg",
+        "error": "line 18: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_042_jpg.rf.954b3c30b3a6bac820dd141e6c4c18ce.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_044_jpg.rf.c3dcd003e2e4374c1e89861cd42d053b.jpg",
+        "error": "line 10: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_045_jpg.rf.bafba72a0ef306fa98e4b41c7c0390df.jpg",
+        "error": "line 10: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_047_jpg.rf.b2811dcd2608bddb26a255e52cc2767c.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_057_jpg.rf.c789f97f5bbe537aa140f5f098d86be9.jpg",
+        "error": "line 6: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_058_jpg.rf.af415f9135f29c7889088073bbe093ea.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_059_jpg.rf.02424aaecb7b09a10c3bd0b113481c63.jpg",
+        "error": "line 8: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_061_jpg.rf.c87f30d499a3f547eb0eda74ceb75df2.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Tigreal_064_jpg.rf.4d8c6c2fc849b1e7a3dad71aa14038a9.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_004_jpg.rf.6b9c37d71f9f27b745c1eb829d1d1531.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_006_jpg.rf.223431e6b94447cfe3296ab39fef4e61.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_007_jpg.rf.f29dea7ff344744902078bc07ace0229.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_008_jpg.rf.7d2a3b66f2045d73bd398b9b7705e012.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_009_jpg.rf.d70393debaacc146e1168bc654f9cfbd.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_010_jpg.rf.ebcaa75adba960c4774045271b1a98cb.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_014_jpg.rf.ba06b748dee8adb420f77dc873ba1124.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_015_jpg.rf.b75a589ed39114d77e4b05fe9011f217.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_016_jpg.rf.b8fe08b95013fcc96c2ac62e8ffcee72.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_017_jpg.rf.3ba0d30c1ccc16b3ed01da574c55dfa0.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_018_jpg.rf.3c33581fe64875e0d0c38ff32fc50067.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_019_jpg.rf.bddbf6d9be266f63df04aaecc3a57068.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_020_jpg.rf.a90ce2d5c658f9f7ebb0830abb854290.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_021_jpg.rf.b10a1dfb0f259f66a6ca73fdc9a1a4c4.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_022_jpg.rf.850581ba49ba571f86ff4d12c59e3bd4.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_023_jpg.rf.ac045d6e980f6d09aef6ca59e953630f.jpg",
+        "error": "line 3: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_024_jpg.rf.c17d4efc61d3fadaa7ab89f655cdabcd.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_025_jpg.rf.d08b1925bbe7e180d854e66ec2de10a0.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_026_jpg.rf.4ede46306edd8d658b416aafb0f46907.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_027_jpg.rf.73b4075c276e8546ab96b2d2a6cfb390.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_030_jpg.rf.dd78b5af610767369b6135c11e181da3.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_033_jpg.rf.075f073661b59a7a5cb90cf05eb55c15.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_034_jpg.rf.a54b5d99e12c31f9718434f02cb52a81.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_035_jpg.rf.12892b79575b7e77ae7ea96f78fa02e1.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_036_jpg.rf.ab9c2ac572e3a735d4bb408573829cd6.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_037_jpg.rf.6eca79c734767aa75c7a65c2e734338e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_038_jpg.rf.8dfb4acf2892d22294c844abd5c75155.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_041_jpg.rf.a74c9faa0da947255e7e10460b481777.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_043_jpg.rf.c4628760d9f9e41b4cc6a2b2e65c8d8c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_045_jpg.rf.952d6af9fcaeb4c3df82bb6b3c50602d.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_046_jpg.rf.9ed061c1bdff9ed8ff0a1fec68270383.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_047_jpg.rf.e50a81f0297a8c824dba92e1766d327f.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_050_jpg.rf.6c307aee000d655fb2bc7c1a76259bce.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_051_jpg.rf.de6a277e7bf6f0df8c0fff7e751777cc.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_057_jpg.rf.950d1ce06cd2e467e9cfd8ef01dd2a2a.jpg",
+        "error": "line 4: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_070_jpg.rf.8acfc9822c155a5ed3b764b3c37e66bd.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_071_jpg.rf.42ddd28531ac1b3ea5b9a3584446bffe.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_072_jpg.rf.8430e5a93d27cb1eeb13a910c6435985.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_073_jpg.rf.9935d78a854b0a76346cd7a51af8ce8d.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_075_jpg.rf.bd865b65d9792bd67597914975a9d5dc.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_076_jpg.rf.9d2ef032d545a2ea2a333a8902925c6e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_077_jpg.rf.686bd387e2fc77046b97f22b3ad6d7dc.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_078_jpg.rf.82f028d8a06bd19c47259885aa94b0c7.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana1_079_jpg.rf.3a5050b381c798b808cbe98d2bf035f8.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_002_jpg.rf.3853daf4e528fcaeea3772157a63a99e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_005_jpg.rf.d8e0dc1ce1967cd86e6a2284642f842f.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_007_jpg.rf.9205bb3a1217f3e86c0f4a1e7652d518.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_008_jpg.rf.a40036c59612c8f8b50d3d7ab1dc3b81.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_009_jpg.rf.b5c37273cc88cb879c6b56bd0dff97c5.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_011_jpg.rf.7507c821a46f32176095b1d440e7a1cf.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_012_jpg.rf.4a690f98c0c0d68c836afedba4916311.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_013_jpg.rf.a04ad805c40edfeac3adf487215ea94c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_014_jpg.rf.e0296154614a8cf4ad10f1ada8145981.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_015_jpg.rf.c32fb1fadfd820f0113547546632c5b8.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_017_jpg.rf.e1adc5971eb65dcdb53144d5c02fa7c0.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_018_jpg.rf.7322cedab2dd260d63ecbd740c845456.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_020_jpg.rf.fdb879a44cec2f67b5ba036f318f7aad.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_022_jpg.rf.81fee08725768e898bb185ac2a20f860.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_025_jpg.rf.7f266bc0997227e5542a02ce813e8fbd.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_027_jpg.rf.9af25730fce1cde8441b455faf55f4cc.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_028_jpg.rf.1b8a132fead7ab91df90454d62a963a0.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_029_jpg.rf.e5f44646c5421a16d51570391319820d.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_030_jpg.rf.b39b425a67d942a250809b8362da87d5.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_031_jpg.rf.f66ac8eaf67e909604c83f2babdc6f5e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_032_jpg.rf.45ce505e2f88c0255a5e6aa51f3508ff.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_033_jpg.rf.73a8367e37d9f83b76f3d61902bcc124.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_034_jpg.rf.0e04a3b2b30032f15461aa1c93c81bde.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_035_jpg.rf.7a7812af035031297ed22e083a7ee750.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_038_jpg.rf.9fb8b60d6b6a2054369f687c78ac8448.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_039_jpg.rf.87540842d8cad3bc360a4bf75119319a.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_040_jpg.rf.8f97cdb94b3d9dd76e365022a77cea36.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_041_jpg.rf.57b2fca70845be36cf19e8c74fa8cc6c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_043_jpg.rf.f7afec650a96c2ffe42ecb25d33ca730.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_047_jpg.rf.d2a5545a68349071b066426f59a9f580.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_048_jpg.rf.52fb725b85d9208ea31c956daa0bc52e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_050_jpg.rf.412ce29912d556b6f46458d0a705aab9.jpg",
+        "error": "line 3: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_051_jpg.rf.0f7313d00c311e487249cc098efcc7d8.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_053_jpg.rf.6b683c8464514e99355262d8260e2f4f.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_054_jpg.rf.4f34f0b5973a6ebef83cdae3e2a4cc74.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_055_jpg.rf.b7255aea8877f2b84890e9b1f4b41c6c.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_057_jpg.rf.2ed4e27aba82fbcf6039fa927f94f19d.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_058_jpg.rf.f9c0f15b60686a8afea395a5d1d2459e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_059_jpg.rf.23b2e7c2df1e72266b00187a84419913.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "train",
+        "image": "Vexana2_060_jpg.rf.3ef35563574d9eb6f18f9742297ffcd6.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Arlott_19200_jpg.rf.5ca1eaee6a6efc680ee575fa90179642.jpg",
+        "error": "line 9: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Bane_12600_jpg.rf.50d25968919db36633ac7eb10db4295b.jpg",
+        "error": "line 11: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Bane_8400_jpg.rf.58d5e7f2610e36c95084c9116e0291b2.jpg",
+        "error": "line 5: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_010_jpg.rf.9ec4ba528a19cb3c6367fc098ab97233.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_027_jpg.rf.02f322bb5a9e337115389fc1fef5e7aa.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_032_jpg.rf.d6569ad1c39dba891c1fa7d3c575bea3.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_038_jpg.rf.8a35210907b7a49598908f0439c3bea1.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_045_jpg.rf.545a30577c771e7fcfd99097f339aac7.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_046_jpg.rf.563443129f38d1d013e8b81291641864.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_047_jpg.rf.4d9f2fe1f1a424997e9fce3b1a098430.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_050_jpg.rf.4dbc9d2d281b447003ccdd148279ae1a.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_054_jpg.rf.4d8de40a9fc608c72b9f2137d2a27a67.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_065_jpg.rf.43b68704f261993aef1cfdea43631d99.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_077_jpg.rf.71ed2a95c81ffcb61c29256be888720d.jpg",
+        "error": "line 6: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_078_jpg.rf.75454ff9d459c145d07b310a19a60c2e.jpg",
+        "error": "line 9: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_079_jpg.rf.e636e45d075be540bd66b5bbb350a4ef.jpg",
+        "error": "line 11: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_080_jpg.rf.adf16438a28a67b2ee9a89e1fd7793ec.jpg",
+        "error": "line 11: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_085_jpg.rf.2b7ddbf1e6f88caa26301a114f560816.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Image_109_jpg.rf.4ecddcc7c52d796db03c910e0cfc6a09.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Lesly_006_jpg.rf.5c24254592a0455b578d762617c60a9c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Lesly_007_jpg.rf.661ea23a69b46f7cb5d78bbdbed04e6c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Lesly_014_jpg.rf.644bb2ad428c48a23e6249e2be03ecea.jpg",
+        "error": "line 9: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Lesly_022_jpg.rf.c547ff82c1e09ce25db935ac18b7a781.jpg",
+        "error": "line 11: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Lesly_025_jpg.rf.b52dc1f948d9ab2a540a242605a16eb4.jpg",
+        "error": "line 4: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_003_jpg.rf.4db3d9572d4810d189797eea857b66e7.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_005_jpg.rf.eff53267fa53e4caf4763a8b5bddaaa1.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_007_jpg.rf.3b727ef217ee35b1b5ff8e324b0fd33a.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_010_jpg.rf.2046a2452db60cbeaa94d0dfc6cd05c3.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_012_jpg.rf.7450df5e481099bd95f8ec788b5d2915.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_014_jpg.rf.8a691db5d25e1a214f8e492295897ef5.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_017_jpg.rf.1cbc9340193f23a2df5c742d742a1a78.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_018_jpg.rf.31d013c7f361315887e7eeea85224799.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_026_jpg.rf.f7b2d68daf57245c877567212954f5c4.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_032_jpg.rf.8804189aeef5377fc655fac3881fdcab.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_040_jpg.rf.7bd476353e11a38461c0a7389f2679be.jpg",
+        "error": "line 14: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_051_jpg.rf.f558eee6f6e72fa606d991c2306601ae.jpg",
+        "error": "line 5: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_052_jpg.rf.6b7e22011e57a54c1e4178c59e3392dc.jpg",
+        "error": "line 13: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_063_jpg.rf.f6ba811999ead3357aa299373e80be1d.jpg",
+        "error": "line 3: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_066_jpg.rf.83f2516e62f10ad450b8be53a92c2a3d.jpg",
+        "error": "line 11: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Tigreal_067_jpg.rf.b42acafe46d40e27dbee5ddba7fe0c56.jpg",
+        "error": "line 12: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_001_jpg.rf.c05c6d448f0501100b4520aa11056004.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_002_jpg.rf.d888b7a4ee97490e2f73e8c0918d46c1.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_003_jpg.rf.fae2f97ab4777d79eaf9438265cd61a9.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_028_jpg.rf.fb17e9650b0a3096d419822c5e6574f4.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_029_jpg.rf.05cac22acdd6c5e0ccb3bc60642ef022.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_031_jpg.rf.c9dc340574c8bf2b3351b9b425fe12ac.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_032_jpg.rf.a79951523012974bdb5547145eaac125.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_042_jpg.rf.50c9e0d592dbdc8165f224c61323dca5.jpg",
+        "error": "line 3: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_044_jpg.rf.41a8ff6890c0935da58eb097da5561e1.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_048_jpg.rf.d9c44865dcb16ccb020ff0ab85fb3c54.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_049_jpg.rf.7f8cf3ad4ec9467e1365edf6f369787b.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_053_jpg.rf.75a58441b5c3164b18bcba55e06632b5.jpg",
+        "error": "line 13: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_060_jpg.rf.67dd0660e51745bcb9cd91dd251250bb.jpg",
+        "error": "line 7: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_074_jpg.rf.7c87f4bb60d52165d18aa508faa5b55f.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana1_080_jpg.rf.8ff7f95f6d41fa910ecaaee575d631bf.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_004_jpg.rf.764f6f98db8ee457baaf9027d3e10f4b.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_010_jpg.rf.db9fac269e7c2fc9e80ff5862f57517b.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_016_jpg.rf.f722ebd463c82b15889bdf5a6f7bda30.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_019_jpg.rf.a83cee47bda0051b307093064ab5afe9.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_021_jpg.rf.f87996432f99b9d6e6b47f164a02c660.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_036_jpg.rf.6271b6ad314d8ef45455d56f579b3518.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_037_jpg.rf.d697bc83c3d8f06ffccbf84ad0a7e1f9.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_042_jpg.rf.46e090b05f017a1104c8855b19162a0a.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_049_jpg.rf.54dca739035b811889088ff327ee7f9f.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_052_jpg.rf.a6fb0578f84dbff139a2aae0429b851f.jpg",
+        "error": "line 3: expected class cx cy width height"
+      },
+      {
+        "split": "val",
+        "image": "Vexana2_056_jpg.rf.f30df625db11af023d112228348f07e4.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_012_jpg.rf.230245efabda5445baa99a084b335a7f.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_025_jpg.rf.bb33badeb3d01306c725e5c9d61f8ef4.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_029_jpg.rf.eecdbe74503b6143130a5d4b95b31b6a.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_035_jpg.rf.fc2d96c6cd0bd47495627e15579b501c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_048_jpg.rf.f62483b0a7d45bda11fc8f588cdff02c.jpg",
+        "error": "line 4: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_062_jpg.rf.69047172421ce1309f9603bf3a31a198.jpg",
+        "error": "line 15: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_081_jpg.rf.fec5186147258ef80f49aa578a35a1fb.jpg",
+        "error": "line 12: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_082_jpg.rf.3e329ee3980692d9b5164812d6e245de.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_083_jpg.rf.ba9d7c96aeb4f886f535e010b7c66eb7.jpg",
+        "error": "line 8: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_101_jpg.rf.25ced9d8e27666f7f78971a3dbbe3575.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_105_jpg.rf.9453545a387cd83ff7486a7a5c4b953c.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Image_108_jpg.rf.366e0ed348aa72e26370325b909f728f.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Lesly_009_jpg.rf.10617e20d6d396ae75b998c9905a2770.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Tigreal_028_jpg.rf.386b452f666db2142a1dd6282a3f0f3e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana1_005_jpg.rf.e952e9f9388ffec9870467cf47d5bc70.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana1_039_jpg.rf.6030085e629c21aa60ea0bfd144dd773.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana1_040_jpg.rf.2d790aefb5681b716d6206bf7586b25a.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana1_058_jpg.rf.3f5b949fd6b13336d682d509e7ed68ed.jpg",
+        "error": "line 10: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana1_081_jpg.rf.249cf786160c3d7cd958657156fad534.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana2_001_jpg.rf.a46cc667097cb1abc197f111e740fa1a.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana2_003_jpg.rf.aad245168a1d27d22147642008a63a9b.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana2_006_jpg.rf.716aa1ed99984cbc18f192de73852bdc.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana2_023_jpg.rf.09189e5b253e72800808e2ec12c89460.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana2_024_jpg.rf.7cd2261a9873d3dc0f4395e73d68a955.jpg",
+        "error": "line 2: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana2_026_jpg.rf.b5c505eedc4a348e4b61efa89ddf07ac.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana2_044_jpg.rf.f0bee2fe33991625ec1db39e2840010e.jpg",
+        "error": "line 1: expected class cx cy width height"
+      },
+      {
+        "split": "test",
+        "image": "Vexana2_045_jpg.rf.92bbd2c539bbf8a075e70e6332a8037d.jpg",
+        "error": "line 1: expected class cx cy width height"
+      }
+    ],
+    "path_warnings": [
+      "train: declared path unavailable; using local train/images",
+      "val: declared path unavailable; using local valid/images",
+      "test: declared path unavailable; using local test/images"
+    ],
+    "duplicate_groups": [],
+    "cross_split_duplicate_groups": 0,
+    "conflicting_label_groups": []
+  },
+  {
+    "dataset": "MLBB_New_Dataset",
+    "names": [
+      "12",
+      "blue_baff",
+      "hp_enemy",
+      "hp_self",
+      "minion_ally",
+      "minion_enemy",
+      "money",
+      "money_crab",
+      "red_baff",
+      "tron-self",
+      "turret_ally",
+      "turret_enemy",
+      "vazon"
+    ],
+    "images": {
+      "train": 343,
+      "val": 33,
+      "test": 55
+    },
+    "boxes_by_class": {
+      "train": {
+        "minion_enemy": 288,
+        "hp_self": 582,
+        "minion_ally": 271,
+        "hp_enemy": 461,
+        "turret_enemy": 20,
+        "turret_ally": 55,
+        "money_crab": 13,
+        "vazon": 3,
+        "12": 2,
+        "blue_baff": 7,
+        "tron-self": 5,
+        "money": 1,
+        "red_baff": 4
+      },
+      "val": {
+        "minion_ally": 29,
+        "minion_enemy": 29,
+        "hp_self": 53,
+        "hp_enemy": 46,
+        "turret_ally": 10,
+        "money_crab": 2,
+        "turret_enemy": 3,
+        "red_baff": 2,
+        "blue_baff": 1
+      },
+      "test": {
+        "hp_self": 95,
+        "turret_ally": 17,
+        "minion_ally": 48,
+        "hp_enemy": 66,
+        "minion_enemy": 48,
+        "money_crab": 5,
+        "red_baff": 3,
+        "turret_enemy": 2,
+        "vazon": 1
+      }
+    },
+    "issues": [
+      {
+        "split": "train",
+        "image": "NpRAM8WR7GjuBg45xKj6-q_T1uMOLqMk_T1516s_F90990_jpg.rf.df82ac1df5a6a0199953a31602c043f0.jpg",
+        "error": "line 8: expected class cx cy width height"
+      }
+    ],
+    "path_warnings": [
+      "train: declared path unavailable; using local train/images",
+      "val: declared path unavailable; using local valid/images",
+      "test: declared path unavailable; using local test/images"
+    ],
+    "duplicate_groups": [],
+    "cross_split_duplicate_groups": 0,
+    "conflicting_label_groups": []
+  }
+]

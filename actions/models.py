@@ -39,16 +39,24 @@ class Action:
         direction: Optional 2D target vector or movement direction (in reference space).
         target_id: Optional track ID of entity being engaged.
         duration: Optional action hold duration in seconds (e.g., movement step).
+        tactical_decision: Original policy choice used for learning credit.
     """
     type: ActionType
     direction: Optional[Vector2] = None
     target_id: Optional[int] = None
     duration: Optional[float] = None
+    tactical_decision: Optional[str] = None
 
     def __post_init__(self):
         """Validates action structural integrity."""
         if not isinstance(self.type, ActionType):
             raise TypeError(f"Action type must be an ActionType enum, got: {type(self.type)}")
+
+        if self.tactical_decision is not None:
+            if not isinstance(self.tactical_decision, str):
+                raise TypeError("tactical_decision must be a string or None")
+            if not self.tactical_decision.strip():
+                raise ValueError("tactical_decision cannot be blank")
 
         if self.duration is not None:
             if math.isnan(self.duration) or self.duration < 0.0:
@@ -62,3 +70,4 @@ class Action:
 
         if self.target_id is not None and not isinstance(self.target_id, int):
             raise TypeError(f"target_id must be int or None, got: {type(self.target_id)}")
+

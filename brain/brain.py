@@ -453,6 +453,7 @@ class ClaudeBrainV2:
 
             return Action(
                 type=action_type,
+                tactical_decision=decision,
                 direction=safe_point,
                 target_id=ts.nearest_enemy_id,
             )
@@ -460,6 +461,7 @@ class ClaudeBrainV2:
         if decision == "KITE_AND_POKE":
             return Action(
                 type=action_type,
+                tactical_decision=decision,
                 direction=ts.nearest_enemy_position,
                 target_id=ts.nearest_enemy_id,
             )
@@ -480,6 +482,7 @@ class ClaudeBrainV2:
 
             return Action(
                 type=action_type,
+                tactical_decision=decision,
                 direction=strafe_pos,
                 target_id=ts.nearest_enemy_id,
             )
@@ -487,6 +490,7 @@ class ClaudeBrainV2:
         if decision == "DIVE_ALL_IN":
             return Action(
                 type=action_type,
+                tactical_decision=decision,
                 direction=ts.nearest_enemy_position,
                 target_id=ts.nearest_enemy_id,
             )
@@ -501,6 +505,7 @@ class ClaudeBrainV2:
         ):
             return Action(
                 type=action_type,
+                tactical_decision=decision,
                 direction=ts.nearest_minion_position,
                 target_id=ts.nearest_minion_id,
             )
@@ -508,6 +513,7 @@ class ClaudeBrainV2:
         if decision == "FARM_S1_AOE":
             return Action(
                 type=action_type,
+                tactical_decision=decision,
                 target_id=ts.nearest_minion_id,
             )
 
@@ -527,6 +533,7 @@ class ClaudeBrainV2:
 
             return Action(
                 type=action_type,
+                tactical_decision=decision,
                 direction=strafe_pos,
                 target_id=ts.nearest_minion_id,
             )
@@ -545,6 +552,7 @@ class ClaudeBrainV2:
 
             return Action(
                 type=action_type,
+                tactical_decision=decision,
                 direction=target_pt,
             )
 
@@ -574,3 +582,4 @@ class ClaudeBrainV2:
             action=action,
             reward=reward.value,
         )
+

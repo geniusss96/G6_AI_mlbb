@@ -57,3 +57,6 @@ data/stage28_summary.json
 data/q_brain_isolated_stage29.json
 data/stage29_session_log.jsonl
 data/stage29_summary.json
+
+# Reproducible prepared datasets; regenerate from raw with training.dataset_tools
+datasets/prepared/

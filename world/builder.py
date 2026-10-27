@@ -66,7 +66,7 @@ class WorldStateBuilder:
             bbox = (det.x1, det.y1, det.x2, det.y2)
             pos = Vector2(cx, cy)
 
-            if any(k in c_name for k in ("enemy", "hero_enemy", "hp_enemy")):
+            if c_name in {"enemy", "hero_enemy", "hp_enemy", "enemy_hero"}:
                 enemies.append(
                     EnemyState(
                         position=pos,
@@ -75,13 +75,13 @@ class WorldStateBuilder:
                         source="yolo",
                     )
                 )
-            elif any(k in c_name for k in ("minion", "creep", "buff", "monster", "crab")):
+            elif any(k in c_name for k in ("minion", "creep", "buff", "baff", "monster", "monstr", "crab")):
                 minions.append(
                     MinionState(
                         position=pos,
                         bbox=bbox,
                         confidence=det.confidence,
-                        is_enemy=True,
+                        is_enemy="ally" not in c_name and "allied" not in c_name,
                         kind="minion" if "minion" in c_name else "buff",
                     )
                 )
@@ -91,10 +91,10 @@ class WorldStateBuilder:
                         position=pos,
                         bbox=bbox,
                         confidence=det.confidence,
-                        is_enemy=True,
+                        is_enemy="ally" not in c_name and "allied" not in c_name,
                     )
                 )
-            elif any(k in c_name for k in ("player", "self", "hp_self", "hero_self")):
+            elif c_name in {"player", "self", "hp_self", "hero_self"}:
                 detected_player_pos = pos
                 detected_player_visible = True
 
@@ -103,7 +103,7 @@ class WorldStateBuilder:
             if detected_player_pos is not None:
                 player = PlayerState(
                     position=detected_player_pos,
-                    hp=player_hp or HPObservation(value=1.0, confidence=1.0, visible=True),
+                    hp=player_hp or HPObservation(value=1.0, confidence=0.0, visible=False),
                     is_visible=True,
                     is_dead=False,
                 )

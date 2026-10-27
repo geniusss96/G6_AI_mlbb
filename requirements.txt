@@ -6,3 +6,7 @@ PyGetWindow>=0.0.9
 ultralytics>=8.0.0
 pywin32>=306
 tqdm>=4.66.1
+
+# Dataset audit and preparation
+PyYAML>=6.0
+Pillow>=10.0
