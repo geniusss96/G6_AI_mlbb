@@ -86,11 +86,13 @@ def test_track_id_replacement_does_not_emit_target_storm():
     detector = WorldEventDetector()
     ws = WorldState(timestamp=1.0)
     old = make_track(1, 500.0, 300.0, name="hp_enemy")
+    old.last_seen = 1.0
     assert [e.type for e in detector.update(ws, [old], timestamp=1.0)] == [EventType.TARGET_ENTERED]
 
     # Old ID disappears and a new ID appears in the same area during a short
     # association hiccup. The replacement must not create LOST + ENTERED churn.
     replacement = make_track(2, 535.0, 315.0, name="hp_enemy")
+    replacement.last_seen = 1.4
     events = detector.update(ws, [replacement], timestamp=1.4)
     assert events == []
 
